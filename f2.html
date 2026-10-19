@@ -603,6 +603,15 @@ $$('.qslot').forEach(function (sl) {
   sl.appendChild(frag);
 });
 
+/* ---------- 解答の再表示（直近の解答） ---------- */
+$$('.qcard').forEach(function (d) {
+  var id = d.getAttribute('data-qid'), q = QD[id], a = S.ans[id];
+  if (!q || !a || !a.p || !a.p.length || d.closest('#rvbody')) return;
+  $$('ol.opts button', d).forEach(function (b) { if (a.p.indexOf(b.getAttribute('data-k')) >= 0) b.classList.add('sel'); });
+  judge(d, q, a.p, false);
+  var x = $('details.ans', d); if (x) x.open = false;
+});
+
 /* ---------- 得点表示（試験の配列） ---------- */
 function updateScores() {
   $$('[data-score]').forEach(function (el) {
