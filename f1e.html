@@ -524,7 +524,7 @@ function card(q, mode) {
 var MAT = 'f1.html', SETS = [["R7", "令和7年度 本試験"], ["R6", "令和6年度 本試験"], ["R5", "令和5年度 本試験"], ["R4", "令和4年度 本試験"], ["R3", "令和3年度 本試験"], ["YK1", "予想問題 第1回"], ["YK2", "予想問題 第2回"], ["YK3", "予想問題 第3回"]];
 function load() {
   var x; try { x = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { x = {}; }
-  ['ans', 'star', 'rvx', 'cnt', 'draft'].forEach(function (k) { x[k] = x[k] || {}; }); x.hist = x.hist || []; return x;
+  ['ans', 'star', 'rvx', 'cnt', 'draft', 'gr'].forEach(function (k) { x[k] = x[k] || {}; }); x.hist = x.hist || []; return x;
 }
 S = load();
 function commit(fn) { S = load(); fn(S); save(); }
@@ -604,10 +604,19 @@ function makeBox(box, key, ids, pts, title) {
         s.ans[r[0]] = { c: r[2] === 'ok' ? 1 : 0, p: r[1], t: now };
         var k = s.cnt[r[0]] = s.cnt[r[0]] || { r: 0, w: 0 }; if (r[2] === 'ok') k.r++; else k.w++;
       });
-      delete s.draft[key];
+      delete s.draft[key]; delete s.gr['x:' + key];
       if (key !== '__rv') s.hist.push({ set: key, t: now, n: n, c: c, sc: sc, mx: mx });
     });
-    cs.forEach(function (d) { var id = d.getAttribute('data-qid'), q = QD[id], p = picked(d); showGraded(d, q, p, verdictOf(q, p)); });
+    if (key !== '__rv') { var snap = {}; recs.forEach(function (r) { snap[r[0]] = r[1]; }); commit(function (s) { s.gr[key] = { t: now, p: snap }; }); }
+    render(true);
+  }
+  function render(scroll) {
+    var cs = cards(), n = 0, c = 0, sc = 0, mx = 0, ng = [];
+    cs.forEach(function (d) {
+      var id = d.getAttribute('data-qid'), q = QD[id], p = picked(d), v = verdictOf(q, p), w = pts[id] || 0;
+      n++; mx += w; if (v === 'ok') { c++; sc += w; } else ng.push([d, q, v]);
+      showGraded(d, q, p, v);
+    });
     box.classList.add('xdone');
     var pct = mx ? Math.round(sc * 100 / mx) : Math.round(c * 100 / Math.max(n, 1));
     res.innerHTML = '<div class="big">' + (mx ? '得点 ' + sc + '／' + mx + '点（' + pct + '％）' : '正解 ' + c + '／' + n + '問（' + pct + '％）') + '</div>' +
@@ -615,9 +624,12 @@ function makeBox(box, key, ids, pts, title) {
       (ng.length ? '<div class="ng">不正解・未解答の問：' + ng.map(function (x) { return '<a href="#' + x[0].id + '"' + (x[2] === 'na' ? ' class="na"' : '') + '>' + esc(x[1].label || ('問' + x[1].no)) + '</a>'; }).join('') + '</div>' : '<div class="ng">全問正解。</div>');
     res.hidden = false;
     [bar, bar2].forEach(function (b) { $('.xgo', b).hidden = true; $('.xopen', b).hidden = false; $('.xredo', b).hidden = false; });
-    box._prog(); updLast(); drawHist(); if (key !== '__rv') { drawChips(); drawReview(); }
+    box._prog();
+    if (!scroll) return;
+    updLast(); drawHist(); if (key !== '__rv') { drawChips(); drawReview(); }
     res.scrollIntoView({ block: 'center' });
   }
+  box._render = render;
   function openAll() {
     var any = cards().some(function (d) { var a = $('details.ans', d); return a && !a.open; });
     cards().forEach(function (d) { var a = $('details.ans', d); if (a) a.open = any; });
@@ -626,7 +638,7 @@ function makeBox(box, key, ids, pts, title) {
   function redo() {
     if (!confirm('選択を消して、この回を最初から解き直します。記録は残ります。よろしいですか。')) return;
     cards().forEach(resetCard); box.classList.remove('xdone'); res.hidden = true;
-    commit(function (s) { delete s.draft[key]; });
+    commit(function (s) { delete s.draft[key]; delete s.gr[key]; s.gr['x:' + key] = 1; });
     [bar, bar2].forEach(function (b) { $('.xgo', b).hidden = false; $('.xopen', b).hidden = true; $('.xredo', b).hidden = true; $('.xopen', b).textContent = '解説をすべて開く'; });
     box._prog(); var top = box.querySelector('.qcard'); if (top) top.scrollIntoView({ block: 'center' });
   }
@@ -650,8 +662,18 @@ $$('section.xm[data-set]').forEach(function (sec) {
   var ui = makeBox(sec, key, ids, pts);
   var pg = $('.page', sec);
   sec.insertBefore(ui.res, pg); sec.insertBefore(ui.bar, pg); sec.appendChild(ui.bar2);
-  var dr = S.draft[key];
-  if (dr) $$('.qcard', sec).forEach(function (d) { var p = dr[d.getAttribute('data-qid')]; if (!p) return; $$('ol.opts button', d).forEach(function (b) { if (p.indexOf(b.getAttribute('data-k')) >= 0) b.classList.add('sel'); }); });
+  var dr = S.draft[key], gr = S.gr[key];
+  if (!dr && !gr && !S.gr['x:' + key]) {
+    // 以前に採点した回：直近の採点と同じ時刻の解答記録から選択を復元する
+    var l = S.hist.filter(function (h) { return h.set === key; }).pop();
+    if (l) { var pm = {}, hit = 0; ids.forEach(function (id) { var a = S.ans[id]; if (a && a.t === l.t) { pm[id] = a.p || []; hit++; } }); if (hit) gr = { t: l.t, p: pm }; }
+  }
+  var src = dr || (gr && gr.p);
+  if (src) $$('.qcard', sec).forEach(function (d) { var p = src[d.getAttribute('data-qid')]; if (!p) return; $$('ol.opts button', d).forEach(function (b) { if (p.indexOf(b.getAttribute('data-k')) >= 0) b.classList.add('sel'); }); });
+  if (!dr && gr) {
+    sec._render(false);
+    [ui.bar, ui.bar2].forEach(function (b) { $('.xgo', b).hidden = true; $('.xopen', b).hidden = false; $('.xredo', b).hidden = false; });
+  }
   sec._prog();
 });
 

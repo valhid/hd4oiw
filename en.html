@@ -296,7 +296,7 @@ body.hlm-mask .hlm.peek{color:inherit}
 <script>
 (function(){
 var KEY='eng_v1',$=function(s,r){return(r||document).querySelector(s)},$$=function(s,r){return[].slice.call((r||document).querySelectorAll(s))};
-function load(){var x;try{x=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){x={}}['ans','star','cnt','draft'].forEach(function(k){x[k]=x[k]||{}});x.hist=x.hist||[];return x}
+function load(){var x;try{x=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){x={}}['ans','star','cnt','draft','gr'].forEach(function(k){x[k]=x[k]||{}});x.hist=x.hist||[];return x}
 var S=load();function commit(f){S=load();f(S);try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 function cards(sec){return $$('.qcard',sec)}
 function picked(d){return $$('ol.opts button.sel',d).map(function(b){return b.dataset.k})}
@@ -309,25 +309,31 @@ function lastOf(k){var h=S.hist.filter(function(x){return x.set===k});return h[h
 function upd(){$$('[data-last]').forEach(function(e){var l=lastOf(e.dataset.last);e.textContent=l?l.sc+'/'+l.mx+'点':''});$$('[data-sc]').forEach(function(e){var l=lastOf(e.dataset.sc);e.textContent=l?'直近 '+l.sc+'／'+l.mx+'点':''});
 var rows=$$('section.yr').map(function(s){var k=s.dataset.set,h=S.hist.filter(function(x){return x.set===k}),l=h[h.length-1],b=h.reduce(function(m,x){return Math.max(m,x.sc)},-1);return'<tr><td><a href="#'+k+'">'+$('h2',s).childNodes[1].textContent+'</a></td><td>'+h.length+'回</td><td>'+(l?l.sc+'／'+l.mx+'点':'－')+'</td><td>'+(b>=0?b+'点':'－')+'</td></tr>'}).join('');
 $('#histbody').innerHTML='<table class="tm"><tr><th>回</th><th>採点回数</th><th>直近の得点</th><th>最高点</th></tr>'+rows+'</table>'}
+function setSel(sec,pm){cards(sec).forEach(function(d){var p=pm[d.dataset.qid]||[];$$('ol.opts button',d).forEach(function(b){if(p.indexOf(b.dataset.k)>=0)b.classList.add('sel')})})}
+function render(sec,scroll){
+ var cs=cards(sec),sc=0,mx=0,c=0,ng=[];
+ cs.forEach(function(d){var p=picked(d),v=verdict(d,p);mx+=5;if(v==='ok'){sc+=5;c++}else ng.push(d);
+  d.classList.add('graded');var a=ansOf(d);$$('ol.opts button',d).forEach(function(b){if(a.indexOf(b.dataset.k)>=0)b.classList.add('ok');else if(p.indexOf(b.dataset.k)>=0)b.classList.add('ng')});
+  var vv=$('.verdict',d);vv.className='verdict '+(v==='ok'?'ok':'ng');vv.setAttribute('data-v',v==='ok'?'正解':v==='ng'?'不正解':'未解答');$('.xh',d).setAttribute('data-t',cnt(d.dataset.qid))});
+ sec.classList.add('done');var r=$('.xres',sec);r.hidden=false;r.innerHTML='<div class="big">得点 '+sc+'／'+mx+'点（正解 '+c+'／'+cs.length+'問）</div>'+(ng.length?'<div style="margin-top:6px;font-size:13px">不正解・未解答：'+ng.map(function(d){return'<a href="#'+d.id+'">'+$('.qno',d).textContent+'</a>'}).join('')+'</div>':'<div style="font-size:13px">全問正解。</div>');
+ $$('.xgo',sec).forEach(function(x){x.hidden=true});$$('.xredo',sec).forEach(function(x){x.hidden=false});prog(sec);upd();if(scroll)r.scrollIntoView({block:'center'})}
 $$('section.yr').forEach(function(sec){
- var key=sec.dataset.set,dr=S.draft[key]||{};
+ var key=sec.dataset.set,dr=S.draft[key],gr=S.gr[key];
+ if(!dr&&!gr&&!S.gr['x:'+key]){var l=lastOf(key);if(l){var pm={},hit=0;cards(sec).forEach(function(d){var a=S.ans[d.dataset.qid];if(a&&a.t===l.t){pm[d.dataset.qid]=a.p||[];hit++}});if(hit)gr={t:l.t,p:pm}}}
  cards(sec).forEach(function(d){var id=d.dataset.qid,st=$('.star',d);$('.xh',d).setAttribute('data-t',cnt(id));st.classList.toggle('on',!!S.star[id]);
   st.onclick=function(){commit(function(s){if(s.star[id])delete s.star[id];else s.star[id]=1});st.classList.toggle('on',!!S.star[id])};
-  var a=ansOf(d);$$('ol.opts button',d).forEach(function(b){if(a.indexOf(b.dataset.k)>=0)b.classList.add('ans1');if((dr[id]||[]).indexOf(b.dataset.k)>=0)b.classList.add('sel');
+  var a=ansOf(d);$$('ol.opts button',d).forEach(function(b){if(a.indexOf(b.dataset.k)>=0)b.classList.add('ans1');
    b.onclick=function(){if(d.classList.contains('graded')||document.body.classList.contains('read'))return;if(d.dataset.multi==='1')b.classList.toggle('sel');else{var on=b.classList.contains('sel');$$('ol.opts button',d).forEach(function(x){x.classList.remove('sel')});if(!on)b.classList.add('sel')}draft(sec);prog(sec)}})});
+ if(dr)setSel(sec,dr);else if(gr){setSel(sec,gr.p);render(sec,false)}
  $$('.xgo',sec).forEach(function(g){g.onclick=function(){
   var cs=cards(sec),un=cs.filter(function(d){return!picked(d).length}).length;if(un&&!confirm('未解答の問が'+un+'問あります。未解答は不正解として採点します。採点しますか。'))return;
-  var sc=0,mx=0,c=0,ng=[],t=Date.now(),rec=[];
-  cs.forEach(function(d){var p=picked(d),v=verdict(d,p);mx+=5;if(v==='ok'){sc+=5;c++}else ng.push(d);rec.push([d.dataset.qid,p,v]);
-   d.classList.add('graded');var a=ansOf(d);$$('ol.opts button',d).forEach(function(b){if(a.indexOf(b.dataset.k)>=0)b.classList.add('ok');else if(p.indexOf(b.dataset.k)>=0)b.classList.add('ng')});
-   var vv=$('.verdict',d);vv.className='verdict '+(v==='ok'?'ok':'ng');vv.setAttribute('data-v',v==='ok'?'正解':v==='ng'?'不正解':'未解答')});
-  commit(function(s){rec.forEach(function(r){s.ans[r[0]]={c:r[2]==='ok'?1:0,p:r[1],t:t};var k=s.cnt[r[0]]=s.cnt[r[0]]||{r:0,w:0};if(r[2]==='ok')k.r++;else k.w++});delete s.draft[key];s.hist.push({set:key,t:t,sc:sc,mx:mx,c:c,n:cs.length})});
-  cs.forEach(function(d){$('.xh',d).setAttribute('data-t',cnt(d.dataset.qid))});
-  sec.classList.add('done');var r=$('.xres',sec);r.hidden=false;r.innerHTML='<div class="big">得点 '+sc+'／'+mx+'点（正解 '+c+'／'+cs.length+'問）</div>'+(ng.length?'<div style="margin-top:6px;font-size:13px">不正解・未解答：'+ng.map(function(d){return'<a href="#'+d.id+'">'+$('.qno',d).textContent+'</a>'}).join('')+'</div>':'<div style="font-size:13px">全問正解。</div>');
-  $$('.xgo',sec).forEach(function(x){x.hidden=true});$$('.xredo',sec).forEach(function(x){x.hidden=false});prog(sec);upd();r.scrollIntoView({block:'center'})}});
+  var sc=0,mx=0,c=0,t=Date.now(),rec=[],snap={};
+  cs.forEach(function(d){var p=picked(d),v=verdict(d,p);mx+=5;if(v==='ok'){sc+=5;c++}rec.push([d.dataset.qid,p,v]);snap[d.dataset.qid]=p});
+  commit(function(s){rec.forEach(function(r){s.ans[r[0]]={c:r[2]==='ok'?1:0,p:r[1],t:t};var k=s.cnt[r[0]]=s.cnt[r[0]]||{r:0,w:0};if(r[2]==='ok')k.r++;else k.w++});delete s.draft[key];delete s.gr['x:'+key];s.gr[key]={t:t,p:snap};s.hist.push({set:key,t:t,sc:sc,mx:mx,c:c,n:cs.length})});
+  render(sec,true)}});
  $$('.xredo',sec).forEach(function(g){g.onclick=function(){if(!confirm('選択を消して最初から解き直します。記録は残ります。'))return;
-  cards(sec).forEach(function(d){d.classList.remove('graded');$$('ol.opts button',d).forEach(function(b){b.classList.remove('sel','ok','ng')});$('details.ans',d).open=false});
-  sec.classList.remove('done');$('.xres',sec).hidden=true;commit(function(s){delete s.draft[key]});$$('.xgo',sec).forEach(function(x){x.hidden=false});$$('.xredo',sec).forEach(function(x){x.hidden=true});prog(sec)}});
+  cards(sec).forEach(function(d){d.classList.remove('graded');$$('ol.opts button',d).forEach(function(b){b.classList.remove('sel','ok','ng')});$('details.ans',d).open=false;$('.verdict',d).removeAttribute('data-v')});
+  sec.classList.remove('done');$('.xres',sec).hidden=true;commit(function(s){delete s.draft[key];delete s.gr[key];s.gr['x:'+key]=1});$$('.xgo',sec).forEach(function(x){x.hidden=false});$$('.xredo',sec).forEach(function(x){x.hidden=true});prog(sec)}});
  prog(sec)});
 var bR=$('#bRead');bR.onclick=function(){var on=document.body.classList.toggle('read');bR.classList.toggle('on',on);bR.textContent=on?'解く形式に戻す':'答えを表示して通読';$$('.qcard details.ans').forEach(function(a){a.open=on})};
 $('#bSide').onclick=function(e){e.stopPropagation();document.body.classList.toggle('side-on')};
