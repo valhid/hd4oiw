@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="robots" content="noindex, nofollow, noarchive, noimageindex"><meta name="googlebot" content="noindex, nofollow"><meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>コードとシェンゲン 暗記</title>
+<style>
+:root{--bg:#f6f1e7;--card:#fffdf8;--ink:#1f2633;--soft:#5b6472;--line:#ddd3c0;--accent:#2d4373;--accent-bg:#e8ecf5;
+--S:#2b2f3a;--S-bg:#e7e8ec;--T:#1d5fa8;--T-bg:#e2edf9;--O:#8e1f4b;--O-bg:#f6e3ea;--N:#6b6f78;--N-bg:#efefef;
+--ok:#1f6b3a;--ok-bg:#e3f1e7;--ng:#a3261b;--ng-bg:#f9e2de;
+--c1:#2e7d4f;--c2:#2a6fb0;--c3:#7a4fa3;--c4:#c77a12;--c5:#7b808a;--c6:#b9a77e}
+*{box-sizing:border-box}
+html{scroll-padding-top:60px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Noto Sans JP","Noto Sans CJK JP","Yu Gothic",sans-serif;font-size:14.5px;line-height:1.65;-webkit-text-size-adjust:100%}
+a{color:var(--accent)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px 80px}
+.hero{background:linear-gradient(135deg,#2d4373,#4a5f93);color:#fff;border-radius:0 0 14px 14px;padding:16px 20px 12px;margin:0 -16px}
+.hero .k{font-size:12px;letter-spacing:.12em;opacity:.85}.hero .k a{color:#fff}
+.hero h1{font-family:"Hiragino Mincho ProN","Noto Serif JP","Yu Mincho",serif;font-size:22px;margin:4px 0 4px}
+.hero p{margin:0;font-size:13px;opacity:.93}
+.tabs{position:sticky;top:0;z-index:30;background:rgba(246,241,231,.97);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);margin:0 -16px;padding:8px 16px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.tabs button,.btn{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:5px 13px;cursor:pointer;min-height:34px}
+.tabs button.on,.btn.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.tabs .sp{flex:1}.tabs .pg{font-size:12px;color:var(--soft)}
+.sub{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 0}
+.sub a{font-size:12.5px;padding:3px 10px;border:1px solid var(--line);border-radius:999px;background:#fff;text-decoration:none;color:var(--ink)}
+.pane[hidden]{display:none}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:14px 0}
+.card h2{font-size:17px;margin:0 0 8px;border-bottom:2px solid var(--accent);padding-bottom:4px;display:flex;flex-wrap:wrap;gap:8px;align-items:baseline}
+.card h2 .cn{font-size:12px;font-weight:400;color:var(--soft)}
+.card h3{font-size:14.5px;margin:12px 0 6px}
+.tools{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 8px;font-size:12.5px;align-items:center}
+.tools .lb{color:var(--soft)}
+.rules{margin:0;padding-left:1.2em}.rules li{margin:3px 0}
+.rules b{font-weight:700}
+.al{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:0 5px;line-height:1.6;white-space:nowrap}
+.al.S{background:var(--S);color:#fff}.al.T{background:var(--T);color:#fff}.al.O{background:var(--O);color:#fff}.al.N{background:var(--N-bg);color:var(--N);border:1px solid #d4d4d4}
+/* アライアンス早見表 */
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{border:1px solid var(--line);padding:4px 6px;vertical-align:top;text-align:left}
+th{background:var(--accent-bg);font-weight:600;white-space:nowrap}
+.tw{overflow-x:auto}
+.mx th.S{background:var(--S);color:#fff}.mx th.T{background:var(--T);color:#fff}.mx th.O{background:var(--O);color:#fff}.mx th.N{background:var(--N-bg)}
+.mx td{min-width:9em}#mxm{display:none}.mr{border-top:1px solid var(--line);padding:6px 0}.mrh{font-weight:700;font-size:13.5px}.mrc{margin:2px 0}.mrc .al{margin-right:4px}.mx td.rg{min-width:0;white-space:nowrap;font-weight:600;background:#faf7f0}
+.chip{display:inline-flex;align-items:baseline;gap:4px;margin:2px 4px 2px 0;padding:1px 7px;border-radius:6px;border:1px solid var(--line);background:#fff;cursor:pointer;font-size:13px}
+.chip b{font-family:"SF Mono",Menlo,Consolas,monospace;font-size:14px;letter-spacing:.04em}
+.chip.S{border-color:#9aa0ad}.chip.T{border-color:#8fb4de}.chip.O{border-color:#d7a0b6}
+.chip .nt{color:#a3261b;font-size:11px}
+body.hc .chip b,body.hc .hcd{color:transparent!important;background:#e4dccb;border-radius:3px}
+body.hn .chip .jn,body.hn .hnm{color:transparent!important;background:#e4dccb;border-radius:3px}
+body.hc .chip.show b,body.hn .chip.show .jn,body.hc tr.show .hcd,body.hn tr.show .hnm{color:inherit!important;background:none}
+.code{font-family:"SF Mono",Menlo,Consolas,monospace;font-weight:700;letter-spacing:.04em}
+tr.x td{color:var(--soft)}
+.conf td:first-child{white-space:nowrap}
+/* 都市 */
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:6px}
+.cc{border:1px solid var(--line);border-radius:8px;background:#fff;padding:5px 8px;cursor:pointer}
+.cc .t{display:flex;gap:6px;align-items:baseline}.cc .t b{font-family:"SF Mono",Menlo,Consolas,monospace;font-size:15px}
+.cc .ct{font-size:11.5px;color:var(--soft)}
+.cc .ap{font-size:12.5px;margin-top:2px}.cc .ap span{display:inline-block;margin-right:6px}
+.cc .ap .code{font-size:13px}
+body.hc .cc:not(.show) b,body.hc .cc:not(.show) .ap .code{color:transparent;background:#e4dccb;border-radius:3px}
+body.hn .cc:not(.show) .nm2,body.hn .cc:not(.show) .ap .an{color:transparent;background:#e4dccb;border-radius:3px}
+/* シェンゲン地図 */
+.sgw{overflow-x:auto;padding-bottom:4px}.sgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;max-width:680px;min-width:480px}
+.tile{border-radius:7px;color:#fff;padding:5px 4px 4px;min-height:58px;text-align:center;font-size:12px;line-height:1.25;cursor:pointer;display:flex;flex-direction:column;justify-content:center;border:2px solid transparent}
+.tile .n{font-weight:700;font-size:12.5px}.tile .c{font-size:11px;opacity:.95;margin-top:2px}
+.tile.k1{background:var(--c1)}.tile.k2{background:var(--c2)}.tile.k3{background:var(--c3)}.tile.k4{background:var(--c4)}.tile.k5{background:var(--c5)}.tile.k6{background:#fff;color:#6a5a33;border:2px dashed var(--c6)}
+.tile.sm{min-height:44px}
+body.hs .tile:not(.show){background:#d9d2c2!important;color:#6b6457;border-color:transparent}body.hs .tile:not(.show) .c{visibility:hidden}
+.leg{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:12.5px;margin:8px 0}
+.leg span{display:inline-flex;align-items:center;gap:5px}.leg i{display:inline-block;width:14px;height:14px;border-radius:3px}
+.cnt3{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0}.cnt3 div{background:#fff;border:1px solid var(--line);border-radius:8px;padding:4px 10px;font-size:13px}.cnt3 b{font-size:18px}
+/* ドリル */
+.decks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px}
+.deck{border:1px solid var(--line);border-radius:10px;background:#fff;padding:8px 10px;cursor:pointer;text-align:left;font:inherit}
+.deck:hover{border-color:var(--accent)}.deck.on{outline:2px solid var(--accent)}
+.deck .t{font-weight:700;font-size:14px}.deck .d{font-size:12px;color:var(--soft)}
+.bar{height:6px;background:#ece5d6;border-radius:3px;overflow:hidden;margin-top:5px}.bar i{display:block;height:100%;background:var(--ok)}
+.deck .m{font-size:11.5px;color:var(--soft);margin-top:2px}
+.qbox{border:1px solid var(--line);border-radius:14px;background:#fff;padding:16px;margin:12px 0;min-height:260px}
+.qtop{display:flex;justify-content:space-between;font-size:12px;color:var(--soft);gap:8px;flex-wrap:wrap}
+.qk{font-size:12.5px;color:var(--soft);margin-top:10px}
+.qq{font-size:22px;font-weight:700;margin:6px 0 14px;line-height:1.45;word-break:break-word}
+.qq .code{font-size:30px}
+.qq .exs{font-size:20px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}.qq .exs .dash{color:var(--soft)}
+.ch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.ch button{font:inherit;font-size:16px;text-align:left;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:10px 12px;cursor:pointer;min-height:52px;display:flex;gap:8px;align-items:center}
+.ch button .n{font-size:11px;color:var(--soft);border:1px solid var(--line);border-radius:4px;padding:0 4px;flex:none}
+.ch button:hover{border-color:var(--accent)}
+.ch button.ok{background:var(--ok-bg);border-color:var(--ok)}.ch button.ng{background:var(--ng-bg);border-color:var(--ng)}
+.ch.c4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.fb{margin-top:12px;padding:10px 12px;border-radius:10px;font-size:14px;display:none}
+.fb.ok{display:block;background:var(--ok-bg)}.fb.ng{display:block;background:var(--ng-bg)}
+.fb .h{font-weight:700;margin-bottom:2px}
+.next{margin-top:10px;display:none}.next.on{display:inline-flex}
+.done{text-align:center;padding:20px}
+.done .big{font-size:30px;font-weight:700}
+.keys{font-size:11.5px;color:var(--soft);margin-top:8px}
+/* 本試験 */
+.exq{border-top:1px solid var(--line);padding:8px 0}
+.exq .h{font-size:12.5px;color:var(--soft)}.exq .s{font-size:13.5px;margin:2px 0 4px}
+.exl{list-style:none;margin:0;padding:0}.exl li{display:grid;grid-template-columns:1fr 4.2em;gap:8px;border:1px solid var(--line);border-radius:8px;background:#fff;padding:6px 8px;margin:4px 0;cursor:pointer}
+.exl .t{font-size:15px;font-weight:600}.exl .w{grid-column:1/3;font-size:12.5px;color:#3b4250}
+.v{display:inline-block;font-size:12px;font-weight:700;border-radius:4px;padding:0 6px;text-align:center}.v.o{color:var(--ok);background:var(--ok-bg)}.v.x{color:#fff;background:var(--ng)}
+body.he .exl li:not(.show) .v,body.he .exl li:not(.show) .w{visibility:hidden}
+.note{font-size:12.5px;color:var(--soft)}
+.top2{position:fixed;right:14px;bottom:14px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:12px;text-decoration:none;z-index:30}
+@media (max-width:640px){.mxw{display:none}#mxm{display:block}.qq{font-size:19px}.qq .code{font-size:26px}.ch button{font-size:15px;padding:9px 10px}.ch.c4{grid-template-columns:repeat(2,minmax(0,1fr))}.tile{min-height:52px}.tile .n{font-size:11.5px}.sgrid{gap:3px}.mx td{min-width:7em}}
+@media (prefers-reduced-motion:no-preference){.ch button{transition:background .12s}}
+</style></head>
+<body>
+<div class="wrap">
+<div class="hero"><div class="k">総合旅行業務取扱管理者試験 ／ <a href="./">教材一覧へ</a></div><h1>コード・アライアンス・シェンゲン 暗記</h1>
+<p>航空会社コードとアライアンス、都市・空港コード、シェンゲン協定の加盟状況と通貨を、一覧・ドリル・本試験の組合せの3つで覚える。所属と制度は2026年8月1日現在（教材「出入国法令・海外実務」P04・P05による）。</p></div>
+<div class="tabs" role="tablist"><button type="button" data-tab="list" class="on">一覧で覚える</button><button type="button" data-tab="drill">ドリル</button><button type="button" data-tab="exam">本試験の組合せ</button><span class="sp"></span><span class="pg" id="pgAll"></span></div>
+
+<!-- 一覧 -->
+<div class="pane" id="p-list">
+<div class="sub"><a href="#s-mx">アライアンス早見表</a><a href="#s-al">航空会社コード一覧</a><a href="#s-cf">取り違えやすいコード</a><a href="#s-ci">都市・空港コード</a><a href="#s-sg">シェンゲン協定と通貨</a></div>
+
+<div class="card" id="s-mx"><h2>アライアンス早見表<span class="cn">地域ごとに、どのアライアンスに属するかを見る</span></h2>
+<div class="tools"><span class="lb">隠して確かめる：</span><button type="button" class="btn" data-hide="hc">コードを隠す</button><button type="button" class="btn" data-hide="hn">社名を隠す</button><span class="note">隠した項目は押すと表示される。</span></div>
+<div class="tw mxw"><table class="mx" id="mx"></table></div><div id="mxm"></div><p class="note">※は最近の加盟・移籍、又は脱退が報じられている社（一覧の補足を参照）。</p>
+<h3>覚え方（同じ国・同じグループで組にする）</h3>
+<ul class="rules">
+<li><b>日本</b>：NH 全日本空輸＝<span class="al S">Star</span>、JL 日本航空＝<span class="al O">oneworld</span></li>
+<li><b>韓国</b>：KE 大韓航空＝<span class="al T">SkyTeam</span>、OZ アシアナ航空＝<span class="al S">Star</span>（OZ は2026年12月16日に脱退すると報じられている）</li>
+<li><b>台湾</b>：CI チャイナエアライン＝<span class="al T">SkyTeam</span>、BR エバー航空＝<span class="al S">Star</span>、JX スターラックス航空＝非加盟</li>
+<li><b>中国</b>：CA 中国国際航空・ZH 深圳航空＝<span class="al S">Star</span>、MU 中国東方航空・MF 厦門航空＝<span class="al T">SkyTeam</span>、CZ 中国南方航空＝非加盟。香港の CX キャセイパシフィック航空＝<span class="al O">oneworld</span></li>
+<li><b>欧州の3グループ</b>：ルフトハンザグループ（LH・LX スイス・OS オーストリア・SN ブリュッセル・AZ ITA）＝<span class="al S">Star</span>、エールフランスKLM（AF・KL）＝<span class="al T">SkyTeam</span>、IAG（BA ブリティッシュ・IB イベリア）＝<span class="al O">oneworld</span></li>
+<li><b>北欧</b>：SK スカンジナビア航空＝<span class="al T">SkyTeam</span>（2024年9月にStarから移籍）、AY フィンエアー＝<span class="al O">oneworld</span></li>
+<li><b>米国の3社</b>：UA ユナイテッド＝<span class="al S">Star</span>、DL デルタ＝<span class="al T">SkyTeam</span>、AA アメリカン＝<span class="al O">oneworld</span>（AS アラスカ・HA ハワイアンも <span class="al O">oneworld</span>）。AC エア・カナダ＝<span class="al S">Star</span></li>
+<li><b>中東</b>：QR カタール・WY オマーン・RJ ロイヤル・ヨルダン＝<span class="al O">oneworld</span>、SV サウディア＝<span class="al T">SkyTeam</span>、TK ターキッシュ＝<span class="al S">Star</span>、EK エミレーツ・EY エティハド＝非加盟</li>
+<li><b>アフリカ</b>：MS エジプト・ET エチオピア・SA 南アフリカ＝<span class="al S">Star</span>、KQ ケニア＝<span class="al T">SkyTeam</span>、AT ロイヤル・エア・モロッコ＝<span class="al O">oneworld</span></li>
+<li><b>オセアニア</b>：QF カンタス・FJ フィジー＝<span class="al O">oneworld</span>、NZ ニュージーランド＝<span class="al S">Star</span>、SB エアカラン＝非加盟</li>
+<li><b>最近の移動</b>：VS ヴァージン アトランティック（2023年3月 SkyTeam 加盟）、SK（2024年9月 Star→SkyTeam）、AZ ITA（2026年4月1日 SkyTeam→Star）、HA ハワイアン（2026年4月 oneworld 加盟）</li>
+</ul></div>
+
+<div class="card" id="s-al"><h2>航空会社コード一覧<span class="cn" id="alCnt"></span></h2>
+<div class="tools"><span class="lb">並べ替え：</span><button type="button" class="btn on" data-sort="c">コード順</button><button type="button" class="btn" data-sort="rg">地域順</button><span class="lb">絞り込み：</span><button type="button" class="btn on" data-alf="">すべて</button><button type="button" class="btn" data-alf="S">Star</button><button type="button" class="btn" data-alf="T">SkyTeam</button><button type="button" class="btn" data-alf="O">oneworld</button><button type="button" class="btn" data-alf="N">非加盟</button></div>
+<div class="tw"><table id="alT"><thead><tr><th>コード</th><th>航空会社</th><th>英語名</th><th>国・地域</th><th>アライアンス</th><th>補足</th></tr></thead><tbody></tbody></table></div>
+<p class="note">コードを隠す・社名を隠すの切り替えはこの表にも効く。行を押すと隠した項目が表示される。</p></div>
+
+<div class="card" id="s-cf"><h2>取り違えやすいコード</h2>
+<div class="tw"><table class="conf" id="cfT"><thead><tr><th>似たコード</th><th>航空会社とアライアンス</th></tr></thead><tbody></tbody></table></div>
+<h3>都市コード</h3>
+<div class="tw"><table class="conf" id="ccT"><thead><tr><th>コード</th><th>正しい都市</th><th>取り違えやすいもの</th></tr></thead><tbody></tbody></table></div></div>
+
+<div class="card" id="s-ci"><h2>都市・空港コード<span class="cn" id="ciCnt"></span></h2>
+<div class="tools"><span class="lb">隠して確かめる：</span><button type="button" class="btn" data-hide="hc">コードを隠す</button><button type="button" class="btn" data-hide="hn">都市名を隠す</button></div>
+<ul class="rules">
+<li>空港が複数ある都市は、都市コードと空港コードが別にある（TYO＝NRT・HND、LON＝LHR・LGW など）。本試験では「その都市の空港か」が問われ、別の都市の空港コードを組み合わせた選択肢が誤りになる（MIL−FCO、WAS−IAH、ROM−LIN）。</li>
+<li>上海の都市コード SHA は虹橋空港の空港コードと同じ。浦東空港は PVG。台北 TPE（桃園）、バンコク BKK（スワンナプーム）も都市コードと同じ空港コードがある。</li>
+<li>カナダのコードは Y で始まるものが多い（YTO トロント、YMQ モントリオール、YVR バンクーバー）。</li>
+<li>同じ名前の都市：オークランドは米国 OAK とニュージーランド AKL、サンティアゴ（チリ）は SCL。</li>
+</ul>
+<div id="ciL"></div></div>
+
+<div class="card" id="s-sg"><h2>シェンゲン協定と通貨<span class="cn">2026年8月1日現在</span></h2>
+<div class="cnt3"><div>EU 加盟国 <b>27</b></div><div>シェンゲン協定加盟国 <b>29</b></div><div>ユーロ導入国 <b>21</b></div></div>
+<div class="tools"><span class="lb">隠して確かめる：</span><button type="button" class="btn" data-hide="hs">区分と通貨を隠す</button><span class="note">国の位置はおおよそ。押すと詳細が出る。</span></div>
+<div class="leg"><span><i style="background:var(--c1)"></i>シェンゲン加盟・ユーロ</span><span><i style="background:var(--c2)"></i>シェンゲン加盟・EU加盟・ユーロ以外</span><span><i style="background:var(--c3)"></i>シェンゲン加盟・EU非加盟</span><span><i style="background:var(--c4)"></i>EU加盟・シェンゲン非加盟（ユーロ）</span><span><i style="background:var(--c5)"></i>EU・シェンゲンとも非加盟</span><span><i style="border:2px dashed var(--c6)"></i>EU非加盟・ユーロ使用</span></div>
+<div class="sgw"><div class="sgrid" id="sgrid"></div></div>
+<div class="fb" id="sgInfo" style="max-width:720px"></div>
+<h3>覚え方</h3>
+<ul class="rules">
+<li><b>EU 加盟なのにシェンゲン非加盟</b>＝アイルランド・キプロス（どちらも島国）。通貨はどちらもユーロ。</li>
+<li><b>EU 非加盟なのにシェンゲン加盟</b>＝アイスランド・ノルウェー・スイス・リヒテンシュタイン（EFTA の4か国）。通貨はクローナ・クローネ・フラン・フラン。</li>
+<li><b>EU 加盟なのにユーロ未導入</b>＝6か国：北欧2（スウェーデン・デンマーク）＋中東欧4（チェコ・ハンガリー・ポーランド・ルーマニア）。6か国ともシェンゲン協定には加盟。</li>
+<li><b>北欧の「王冠」</b>：クローナ＝スウェーデン・アイスランド、クローネ＝デンマーク・ノルウェー、コルナ＝チェコ。フィンランドはユーロ。</li>
+<li><b>ユーロに切り替えた国と旧通貨</b>（誤りの選択肢に旧通貨が使われる）：スロバキア（コルナ、2009年）、エストニア（クローン、2011年）、ラトビア（ラッツ、2014年）、リトアニア（リタス、2015年）、クロアチア（クーナ、2023年）、ブルガリア（レフ、2026年1月1日）。</li>
+<li><b>英国</b>：EU・シェンゲン協定とも非加盟、通貨はポンド。</li>
+<li><b>最近の加盟</b>：クロアチア（2023年1月1日 シェンゲン・ユーロ）、ブルガリア・ルーマニア（2025年1月1日 シェンゲン完全加盟）、ブルガリア（2026年1月1日 ユーロ）。キプロスはシェンゲン協定の適用に向けた手続中。</li>
+</ul>
+<div class="tw" style="margin-top:8px"><table id="sgT"><thead><tr><th>国</th><th>EU</th><th>シェンゲン協定</th><th>通貨</th><th>補足</th></tr></thead><tbody></tbody></table></div>
+</div>
+</div>
+
+<!-- ドリル -->
+<div class="pane" id="p-drill" hidden>
+<div class="card"><h2>ドリル<span class="cn">1回20問。間違えた問題は数問後に再び出る。正答を重ねた問題ほど出にくくなる。</span></h2>
+<div id="deckw"><div class="decks" id="decks"></div></div><button type="button" class="btn" id="bDecks" hidden>ドリルを選び直す</button>
+<div class="tools" style="margin-top:8px"><button type="button" class="btn" id="bWeak">苦手だけ（誤答の多い順）</button><button type="button" class="btn" id="bReset">記録を消す</button><span class="note" id="dNote"></span></div>
+<div class="qbox" id="qbox"><div class="done"><div class="big">ドリルを選ぶ</div><p class="note">「おまかせ」は全種類から、未出題と苦手を優先して出す。本試験形式は「A−B−C」の組合せの正誤を判断する。</p></div></div>
+<div class="keys">キー操作：1〜4 で選択（正誤は 1＝正しい、2＝誤り）、Enter／スペースで次へ。</div>
+</div></div>
+
+<!-- 本試験 -->
+<div class="pane" id="p-exam" hidden>
+<div class="card"><h2>本試験の組合せ（令和3〜7年度）<span class="cn" id="exCnt"></span></h2>
+<div class="tools"><button type="button" class="btn" id="bHe">正誤を隠す</button><span class="note">正誤は2026年8月1日現在の規則による。行を押すと隠した正誤が表示される。</span></div>
+<div id="exL"></div></div></div>
+</div>
+<a class="top2" href="#">先頭へ</a>
+<script id="DATA" type="application/json">{"al": [{"c": "JL", "en": "Japan Airlines", "ja": "日本航空", "ct": "日本", "al": "O", "rg": "日本"}, {"c": "NH", "en": "All Nippon Airways", "ja": "全日本空輸", "ct": "日本", "al": "S", "rg": "日本", "o": "前身の日本ヘリコプター輸送（Nippon Helicopter）のコード"}, {"c": "KE", "en": "Korean Air", "ja": "大韓航空", "ct": "韓国", "al": "T", "rg": "韓国"}, {"c": "OZ", "en": "Asiana Airlines", "ja": "アシアナ航空", "ct": "韓国", "al": "S", "rg": "韓国", "n": "大韓航空との統合に伴い、2026年12月16日にスターアライアンスを脱退すると報じられている（2026年8月1日現在は加盟社）。"}, {"c": "CA", "en": "Air China", "ja": "中国国際航空", "ct": "中国", "al": "S", "rg": "中国"}, {"c": "MU", "en": "China Eastern Airlines", "ja": "中国東方航空", "ct": "中国", "al": "T", "rg": "中国"}, {"c": "CZ", "en": "China Southern Airlines", "ja": "中国南方航空", "ct": "中国", "al": "N", "rg": "中国"}, {"c": "ZH", "en": "Shenzhen Airlines", "ja": "深圳航空", "ct": "中国", "al": "S", "rg": "中国"}, {"c": "MF", "en": "Xiamen Airlines", "ja": "厦門航空", "ct": "中国", "al": "T", "rg": "中国"}, {"c": "CX", "en": "Cathay Pacific", "ja": "キャセイパシフィック航空", "ct": "香港", "al": "O", "rg": "香港・台湾"}, {"c": "BR", "en": "EVA Air", "ja": "エバー航空", "ct": "台湾", "al": "S", "rg": "香港・台湾"}, {"c": "CI", "en": "China Airlines", "ja": "チャイナエアライン", "ct": "台湾", "al": "T", "rg": "香港・台湾"}, {"c": "JX", "en": "STARLUX Airlines", "ja": "スターラックス航空", "ct": "台湾", "al": "N", "rg": "香港・台湾"}, {"c": "PR", "en": "Philippine Airlines", "ja": "フィリピン航空", "ct": "フィリピン", "al": "N", "rg": "東南アジア"}, {"c": "TG", "en": "Thai Airways International", "ja": "タイ国際航空", "ct": "タイ", "al": "S", "rg": "東南アジア"}, {"c": "VN", "en": "Vietnam Airlines", "ja": "ベトナム航空", "ct": "ベトナム", "al": "T", "rg": "東南アジア"}, {"c": "SQ", "en": "Singapore Airlines", "ja": "シンガポール航空", "ct": "シンガポール", "al": "S", "rg": "東南アジア"}, {"c": "MH", "en": "Malaysia Airlines", "ja": "マレーシア航空", "ct": "マレーシア", "al": "O", "rg": "東南アジア"}, {"c": "GA", "en": "Garuda Indonesia", "ja": "ガルーダ・インドネシア航空", "ct": "インドネシア", "al": "T", "rg": "東南アジア"}, {"c": "AI", "en": "Air India", "ja": "エア・インディア", "ct": "インド", "al": "S", "rg": "南アジア"}, {"c": "UL", "en": "SriLankan Airlines", "ja": "スリランカ航空", "ct": "スリランカ", "al": "O", "rg": "南アジア", "o": "前身のエア・ランカ（Air Lanka）のコード"}, {"c": "OM", "en": "MIAT Mongolian Airlines", "ja": "MIATモンゴル航空", "ct": "モンゴル", "al": "N", "rg": "東アジア（その他）"}, {"c": "EK", "en": "Emirates", "ja": "エミレーツ航空", "ct": "アラブ首長国連邦", "al": "N", "rg": "中東"}, {"c": "EY", "en": "Etihad Airways", "ja": "エティハド航空", "ct": "アラブ首長国連邦", "al": "N", "rg": "中東"}, {"c": "QR", "en": "Qatar Airways", "ja": "カタール航空", "ct": "カタール", "al": "O", "rg": "中東"}, {"c": "WY", "en": "Oman Air", "ja": "オマーン航空", "ct": "オマーン", "al": "O", "rg": "中東"}, {"c": "RJ", "en": "Royal Jordanian", "ja": "ロイヤル・ヨルダン航空", "ct": "ヨルダン", "al": "O", "rg": "中東"}, {"c": "SV", "en": "Saudia", "ja": "サウディア", "ct": "サウジアラビア", "al": "T", "rg": "中東"}, {"c": "TK", "en": "Turkish Airlines", "ja": "ターキッシュ エアラインズ（トルコ航空）", "ct": "トルコ", "al": "S", "rg": "中東"}, {"c": "MS", "en": "EgyptAir", "ja": "エジプト航空", "ct": "エジプト", "al": "S", "rg": "アフリカ", "o": "エジプトのアラビア語名ミスル（Misr）"}, {"c": "ET", "en": "Ethiopian Airlines", "ja": "エチオピア航空", "ct": "エチオピア", "al": "S", "rg": "アフリカ"}, {"c": "KQ", "en": "Kenya Airways", "ja": "ケニア航空", "ct": "ケニア", "al": "T", "rg": "アフリカ"}, {"c": "AT", "en": "Royal Air Maroc", "ja": "ロイヤル・エア・モロッコ", "ct": "モロッコ", "al": "O", "rg": "アフリカ"}, {"c": "SA", "en": "South African Airways", "ja": "南アフリカ航空", "ct": "南アフリカ", "al": "S", "rg": "アフリカ"}, {"c": "BA", "en": "British Airways", "ja": "ブリティッシュ・エアウェイズ", "ct": "英国", "al": "O", "rg": "ヨーロッパ"}, {"c": "VS", "en": "Virgin Atlantic", "ja": "ヴァージン アトランティック航空", "ct": "英国", "al": "T", "rg": "ヨーロッパ", "n": "2023年3月にスカイチームに加盟。"}, {"c": "AF", "en": "Air France", "ja": "エールフランス", "ct": "フランス", "al": "T", "rg": "ヨーロッパ"}, {"c": "KL", "en": "KLM Royal Dutch Airlines", "ja": "KLMオランダ航空", "ct": "オランダ", "al": "T", "rg": "ヨーロッパ", "o": "KLM"}, {"c": "LH", "en": "Lufthansa", "ja": "ルフトハンザ ドイツ航空", "ct": "ドイツ", "al": "S", "rg": "ヨーロッパ"}, {"c": "LX", "en": "Swiss International Air Lines", "ja": "スイス インターナショナル エアラインズ", "ct": "スイス", "al": "S", "rg": "ヨーロッパ", "o": "前身のクロスエア（Crossair）のコードを継承"}, {"c": "OS", "en": "Austrian Airlines", "ja": "オーストリア航空", "ct": "オーストリア", "al": "S", "rg": "ヨーロッパ", "o": "オーストリアのドイツ語名 Österreich"}, {"c": "SN", "en": "Brussels Airlines", "ja": "ブリュッセル航空", "ct": "ベルギー", "al": "S", "rg": "ヨーロッパ", "o": "前身のサベナ・ベルギー航空（Sabena）のコードを継承"}, {"c": "AZ", "en": "ITA Airways", "ja": "ITAエアウェイズ", "ct": "イタリア", "al": "S", "rg": "ヨーロッパ", "o": "前身のアリタリア航空のコードを継承", "n": "2025年にスカイチームを脱退し、2026年4月1日にスターアライアンスに加盟。"}, {"c": "IB", "en": "Iberia", "ja": "イベリア航空", "ct": "スペイン", "al": "O", "rg": "ヨーロッパ"}, {"c": "TP", "en": "TAP Air Portugal", "ja": "TAPポルトガル航空", "ct": "ポルトガル", "al": "S", "rg": "ヨーロッパ"}, {"c": "SK", "en": "SAS Scandinavian Airlines", "ja": "スカンジナビア航空", "ct": "デンマーク・ノルウェー・スウェーデン", "al": "T", "rg": "ヨーロッパ", "o": "SAS（Scandinavian）", "n": "2024年9月1日にスターアライアンスからスカイチームに移籍。"}, {"c": "AY", "en": "Finnair", "ja": "フィンエアー", "ct": "フィンランド", "al": "O", "rg": "ヨーロッパ", "o": "フィンランド語の旧社名 Aero O/Y"}, {"c": "LO", "en": "LOT Polish Airlines", "ja": "LOTポーランド航空", "ct": "ポーランド", "al": "S", "rg": "ヨーロッパ"}, {"c": "A3", "en": "Aegean Airlines", "ja": "エーゲ航空", "ct": "ギリシャ", "al": "S", "rg": "ヨーロッパ"}, {"c": "OU", "en": "Croatia Airlines", "ja": "クロアチア航空", "ct": "クロアチア", "al": "S", "rg": "ヨーロッパ"}, {"c": "AA", "en": "American Airlines", "ja": "アメリカン航空", "ct": "米国", "al": "O", "rg": "北米"}, {"c": "UA", "en": "United Airlines", "ja": "ユナイテッド航空", "ct": "米国", "al": "S", "rg": "北米"}, {"c": "DL", "en": "Delta Air Lines", "ja": "デルタ航空", "ct": "米国", "al": "T", "rg": "北米"}, {"c": "AS", "en": "Alaska Airlines", "ja": "アラスカ航空", "ct": "米国", "al": "O", "rg": "北米"}, {"c": "HA", "en": "Hawaiian Airlines", "ja": "ハワイアン航空", "ct": "米国", "al": "O", "rg": "北米", "n": "2026年4月にワンワールドに加盟。便名はアラスカ航空の AS コードに移行した。"}, {"c": "AC", "en": "Air Canada", "ja": "エア・カナダ", "ct": "カナダ", "al": "S", "rg": "北米"}, {"c": "AM", "en": "Aeroméxico", "ja": "アエロメヒコ航空", "ct": "メキシコ", "al": "T", "rg": "中南米"}, {"c": "CM", "en": "Copa Airlines", "ja": "コパ航空", "ct": "パナマ", "al": "S", "rg": "中南米"}, {"c": "AV", "en": "Avianca", "ja": "アビアンカ航空", "ct": "コロンビア", "al": "S", "rg": "中南米"}, {"c": "AR", "en": "Aerolíneas Argentinas", "ja": "アルゼンチン航空", "ct": "アルゼンチン", "al": "T", "rg": "中南米"}, {"c": "QF", "en": "Qantas Airways", "ja": "カンタス航空", "ct": "オーストラリア", "al": "O", "rg": "オセアニア"}, {"c": "NZ", "en": "Air New Zealand", "ja": "ニュージーランド航空", "ct": "ニュージーランド", "al": "S", "rg": "オセアニア"}, {"c": "FJ", "en": "Fiji Airways", "ja": "フィジー・エアウェイズ", "ct": "フィジー", "al": "O", "rg": "オセアニア"}, {"c": "SB", "en": "Aircalin（Air Calédonie International）", "ja": "エアカラン", "ct": "ニューカレドニア（フランス領）", "al": "N", "rg": "オセアニア"}, {"c": "ME", "en": "Middle East Airlines", "ja": "ミドル・イースト航空", "ct": "レバノン", "al": "", "rg": "中東", "x": 1}, {"c": "UX", "en": "Air Europa", "ja": "エア・ヨーロッパ", "ct": "スペイン", "al": "", "rg": "ヨーロッパ", "x": 1}], "conf": [["AY", "FJ"], ["LX", "SK", "SN"], ["OS", "OZ"], ["CA", "CI", "CX", "CZ"], ["KE", "KL", "KQ"], ["MH", "MS", "ME"], ["UA", "UL", "UX"], ["AA", "AS", "AF", "AM", "AR"], ["QF", "QR"], ["TG", "TK", "TP"], ["SQ", "SA", "SV"], ["VN", "VS"], ["EK", "EY"], ["NH", "NZ"]], "ci": [{"c": "TYO", "nm": "東京", "ct": "日本", "rg": "日本", "ap": [["NRT", "成田"], ["HND", "羽田"]], "nt": ""}, {"c": "OSA", "nm": "大阪", "ct": "日本", "rg": "日本", "ap": [["KIX", "関西"], ["ITM", "伊丹"], ["UKB", "神戸"]], "nt": ""}, {"c": "NGO", "nm": "名古屋", "ct": "日本", "rg": "日本", "ap": [["NGO", "中部"]], "nt": ""}, {"c": "SPK", "nm": "札幌", "ct": "日本", "rg": "日本", "ap": [["CTS", "新千歳"]], "nt": ""}, {"c": "FUK", "nm": "福岡", "ct": "日本", "rg": "日本", "ap": [], "nt": ""}, {"c": "OKA", "nm": "那覇", "ct": "日本", "rg": "日本", "ap": [], "nt": ""}, {"c": "SEL", "nm": "ソウル", "ct": "韓国", "rg": "東アジア", "ap": [["ICN", "仁川"], ["GMP", "金浦"]], "nt": ""}, {"c": "PUS", "nm": "釜山", "ct": "韓国", "rg": "東アジア", "ap": [], "nt": ""}, {"c": "CJU", "nm": "済州", "ct": "韓国", "rg": "東アジア", "ap": [], "nt": ""}, {"c": "BJS", "nm": "北京", "ct": "中国", "rg": "東アジア", "ap": [["PEK", "首都"], ["PKX", "大興"]], "nt": ""}, {"c": "SHA", "nm": "上海", "ct": "中国", "rg": "東アジア", "ap": [["PVG", "浦東"], ["SHA", "虹橋"]], "nt": ""}, {"c": "CAN", "nm": "広州", "ct": "中国", "rg": "東アジア", "ap": [], "nt": ""}, {"c": "HKG", "nm": "香港", "ct": "香港", "rg": "東アジア", "ap": [], "nt": ""}, {"c": "MFM", "nm": "マカオ", "ct": "マカオ", "rg": "東アジア", "ap": [], "nt": ""}, {"c": "TPE", "nm": "台北", "ct": "台湾", "rg": "東アジア", "ap": [["TPE", "桃園"], ["TSA", "松山"]], "nt": ""}, {"c": "KHH", "nm": "高雄", "ct": "台湾", "rg": "東アジア", "ap": [], "nt": ""}, {"c": "UBN", "nm": "ウランバートル", "ct": "モンゴル", "rg": "東アジア", "ap": [], "nt": ""}, {"c": "MNL", "nm": "マニラ", "ct": "フィリピン", "rg": "東南・南アジア", "ap": [], "nt": ""}, {"c": "CEB", "nm": "セブ", "ct": "フィリピン", "rg": "東南・南アジア", "ap": [], "nt": ""}, {"c": "BKK", "nm": "バンコク", "ct": "タイ", "rg": "東南・南アジア", "ap": [["BKK", "スワンナプーム"], ["DMK", "ドンムアン"]], "nt": ""}, {"c": "HKT", "nm": "プーケット", "ct": "タイ", "rg": "東南・南アジア", "ap": [], "nt": ""}, {"c": "CNX", "nm": "チェンマイ", "ct": "タイ", "rg": "東南・南アジア", "ap": [], "nt": ""}, {"c": "SGN", "nm": "ホーチミンシティ", "ct": "ベトナム", "rg": "東南・南アジア", "ap": [], "nt": ""}, {"c": "HAN", "nm": "ハノイ", "ct": "ベトナム", "rg": "東南・南アジア", "ap": [], "nt": ""}, {"c": "DAD", "nm": "ダナン", "ct": "ベトナム", "rg": "東南・南アジア", "ap": [], "nt": ""}, {"c": "PNH", "nm": "プノンペン", "ct": "カンボジア", "rg": "東南・南アジア", "ap": [], "nt": "カンボジア"}, {"c": "RGN", "nm": "ヤンゴン", "ct": "ミャンマー", "rg": "東南・南アジア", "ap": [], "nt": ""}, {"c": "KUL", "nm": "クアラルンプール", "ct": "マレーシア", "rg": "東南・南アジア", "ap": [], "nt": ""}, {"c": "SIN", "nm": "シンガポール", "ct": "シンガポール", "rg": "東南・南アジア", "ap": [], "nt": ""}, {"c": "JKT", "nm": "ジャカルタ", "ct": "インドネシア", "rg": "東南・南アジア", "ap": [["CGK", ""]], "nt": ""}, {"c": "DPS", "nm": "デンパサール", "ct": "インドネシア", "rg": "東南・南アジア", "ap": [], "nt": "バリ島"}, {"c": "DEL", "nm": "デリー", "ct": "インド", "rg": "東南・南アジア", "ap": [], "nt": ""}, {"c": "BOM", "nm": "ムンバイ", "ct": "インド", "rg": "東南・南アジア", "ap": [], "nt": ""}, {"c": "CMB", "nm": "コロンボ", "ct": "スリランカ", "rg": "東南・南アジア", "ap": [], "nt": ""}, {"c": "KTM", "nm": "カトマンズ", "ct": "ネパール", "rg": "東南・南アジア", "ap": [], "nt": ""}, {"c": "MLE", "nm": "マレ", "ct": "モルディブ", "rg": "東南・南アジア", "ap": [], "nt": ""}, {"c": "DXB", "nm": "ドバイ", "ct": "アラブ首長国連邦", "rg": "中東・アフリカ", "ap": [], "nt": ""}, {"c": "AUH", "nm": "アブダビ", "ct": "アラブ首長国連邦", "rg": "中東・アフリカ", "ap": [], "nt": ""}, {"c": "DOH", "nm": "ドーハ", "ct": "カタール", "rg": "中東・アフリカ", "ap": [], "nt": ""}, {"c": "IST", "nm": "イスタンブール", "ct": "トルコ", "rg": "中東・アフリカ", "ap": [["IST", ""], ["SAW", ""]], "nt": ""}, {"c": "TLV", "nm": "テルアビブ", "ct": "イスラエル", "rg": "中東・アフリカ", "ap": [], "nt": ""}, {"c": "CAI", "nm": "カイロ", "ct": "エジプト", "rg": "中東・アフリカ", "ap": [], "nt": ""}, {"c": "LXR", "nm": "ルクソール", "ct": "エジプト", "rg": "中東・アフリカ", "ap": [], "nt": ""}, {"c": "CAS", "nm": "カサブランカ", "ct": "モロッコ", "rg": "中東・アフリカ", "ap": [["CMN", ""]], "nt": ""}, {"c": "JNB", "nm": "ヨハネスブルグ", "ct": "南アフリカ", "rg": "中東・アフリカ", "ap": [], "nt": ""}, {"c": "NBO", "nm": "ナイロビ", "ct": "ケニア", "rg": "中東・アフリカ", "ap": [], "nt": ""}, {"c": "LON", "nm": "ロンドン", "ct": "英国", "rg": "ヨーロッパ", "ap": [["LHR", "ヒースロー"], ["LGW", "ガトウィック"], ["STN", "スタンステッド"], ["LTN", "ルートン"], ["LCY", "シティ"]], "nt": ""}, {"c": "EDI", "nm": "エディンバラ", "ct": "英国", "rg": "ヨーロッパ", "ap": [], "nt": ""}, {"c": "DUB", "nm": "ダブリン", "ct": "アイルランド", "rg": "ヨーロッパ", "ap": [], "nt": ""}, {"c": "PAR", "nm": "パリ", "ct": "フランス", "rg": "ヨーロッパ", "ap": [["CDG", "シャルル・ド・ゴール"], ["ORY", "オルリー"]], "nt": ""}, {"c": "MRS", "nm": "マルセイユ", "ct": "フランス", "rg": "ヨーロッパ", "ap": [], "nt": ""}, {"c": "NCE", "nm": "ニース", "ct": "フランス", "rg": "ヨーロッパ", "ap": [], "nt": ""}, {"c": "FRA", "nm": "フランクフルト", "ct": "ドイツ", "rg": "ヨーロッパ", "ap": [], "nt": ""}, {"c": "MUC", "nm": "ミュンヘン", "ct": "ドイツ", "rg": "ヨーロッパ", "ap": [], "nt": ""}, {"c": "BER", "nm": "ベルリン", "ct": "ドイツ", "rg": "ヨーロッパ", "ap": [], "nt": ""}, {"c": "AMS", "nm": "アムステルダム", "ct": "オランダ", "rg": "ヨーロッパ", "ap": [], "nt": ""}, {"c": "BRU", "nm": "ブリュッセル", "ct": "ベルギー", "rg": "ヨーロッパ", "ap": [], "nt": ""}, {"c": "ZRH", "nm": "チューリヒ", "ct": "スイス", "rg": "ヨーロッパ", "ap": [], "nt": ""}, {"c": "GVA", "nm": "ジュネーブ", "ct": "スイス", "rg": "ヨーロッパ", "ap": [], "nt": ""}, {"c": "VIE", "nm": "ウィーン", "ct": "オーストリア", "rg": "ヨーロッパ", "ap": [], "nt": ""}, {"c": "PRG", "nm": "プラハ", "ct": "チェコ", "rg": "ヨーロッパ", "ap": [], "nt": ""}, {"c": "BUD", "nm": "ブダペスト", "ct": "ハンガリー", "rg": "ヨーロッパ", "ap": [], "nt": ""}, {"c": "WAW", "nm": "ワルシャワ", "ct": "ポーランド", "rg": "ヨーロッパ", "ap": [], "nt": ""}, {"c": "ROM", "nm": "ローマ", "ct": "イタリア", "rg": "ヨーロッパ", "ap": [["FCO", "フィウミチーノ"], ["CIA", "チャンピーノ"]], "nt": ""}, {"c": "MIL", "nm": "ミラノ", "ct": "イタリア", "rg": "ヨーロッパ", "ap": [["MXP", "マルペンサ"], ["LIN", "リナーテ"], ["BGY", "ベルガモ"]], "nt": ""}, {"c": "VCE", "nm": "ベネチア", "ct": "イタリア", "rg": "ヨーロッパ", "ap": [], "nt": ""}, {"c": "FLR", "nm": "フィレンツェ", "ct": "イタリア", "rg": "ヨーロッパ", "ap": [], "nt": ""}, {"c": "NAP", "nm": "ナポリ", "ct": "イタリア", "rg": "ヨーロッパ", "ap": [], "nt": ""}, {"c": "MAD", "nm": "マドリード", "ct": "スペイン", "rg": "ヨーロッパ", "ap": [], "nt": ""}, {"c": "BCN", "nm": "バルセロナ", "ct": "スペイン", "rg": "ヨーロッパ", "ap": [], "nt": ""}, {"c": "GRX", "nm": "グラナダ", "ct": "スペイン", "rg": "ヨーロッパ", "ap": [], "nt": ""}, {"c": "LIS", "nm": "リスボン", "ct": "ポルトガル", "rg": "ヨーロッパ", "ap": [], "nt": ""}, {"c": "ATH", "nm": "アテネ", "ct": "ギリシャ", "rg": "ヨーロッパ", "ap": [], "nt": ""}, {"c": "CPH", "nm": "コペンハーゲン", "ct": "デンマーク", "rg": "ヨーロッパ", "ap": [], "nt": ""}, {"c": "STO", "nm": "ストックホルム", "ct": "スウェーデン", "rg": "ヨーロッパ", "ap": [["ARN", "アーランダ"]], "nt": ""}, {"c": "OSL", "nm": "オスロ", "ct": "ノルウェー", "rg": "ヨーロッパ", "ap": [], "nt": ""}, {"c": "HEL", "nm": "ヘルシンキ", "ct": "フィンランド", "rg": "ヨーロッパ", "ap": [], "nt": ""}, {"c": "REK", "nm": "レイキャビク", "ct": "アイスランド", "rg": "ヨーロッパ", "ap": [["KEF", "ケフラヴィーク"]], "nt": ""}, {"c": "MOW", "nm": "モスクワ", "ct": "ロシア", "rg": "ヨーロッパ", "ap": [["SVO", ""], ["DME", ""], ["VKO", ""]], "nt": ""}, {"c": "NYC", "nm": "ニューヨーク", "ct": "米国", "rg": "北米", "ap": [["JFK", ""], ["EWR", "ニューアーク"], ["LGA", "ラガーディア"]], "nt": ""}, {"c": "WAS", "nm": "ワシントン", "ct": "米国", "rg": "北米", "ap": [["IAD", "ダレス"], ["DCA", "レーガン・ナショナル"], ["BWI", "ボルチモア"]], "nt": ""}, {"c": "BOS", "nm": "ボストン", "ct": "米国", "rg": "北米", "ap": [], "nt": ""}, {"c": "CHI", "nm": "シカゴ", "ct": "米国", "rg": "北米", "ap": [["ORD", "オヘア"], ["MDW", "ミッドウェー"]], "nt": ""}, {"c": "ATL", "nm": "アトランタ", "ct": "米国", "rg": "北米", "ap": [], "nt": ""}, {"c": "MIA", "nm": "マイアミ", "ct": "米国", "rg": "北米", "ap": [], "nt": ""}, {"c": "ORL", "nm": "オーランド", "ct": "米国", "rg": "北米", "ap": [["MCO", ""]], "nt": ""}, {"c": "MSY", "nm": "ニューオーリンズ", "ct": "米国", "rg": "北米", "ap": [], "nt": ""}, {"c": "DFW", "nm": "ダラス・フォートワース", "ct": "米国", "rg": "北米", "ap": [], "nt": ""}, {"c": "HOU", "nm": "ヒューストン", "ct": "米国", "rg": "北米", "ap": [["IAH", ""], ["HOU", ""]], "nt": ""}, {"c": "DEN", "nm": "デンバー", "ct": "米国", "rg": "北米", "ap": [], "nt": ""}, {"c": "MSP", "nm": "ミネアポリス", "ct": "米国", "rg": "北米", "ap": [], "nt": ""}, {"c": "PHX", "nm": "フェニックス", "ct": "米国", "rg": "北米", "ap": [], "nt": ""}, {"c": "LAS", "nm": "ラスベガス", "ct": "米国", "rg": "北米", "ap": [], "nt": ""}, {"c": "LAX", "nm": "ロサンゼルス", "ct": "米国", "rg": "北米", "ap": [], "nt": ""}, {"c": "SAN", "nm": "サンディエゴ", "ct": "米国", "rg": "北米", "ap": [], "nt": ""}, {"c": "SFO", "nm": "サンフランシスコ", "ct": "米国", "rg": "北米", "ap": [], "nt": ""}, {"c": "OAK", "nm": "オークランド", "ct": "米国", "rg": "北米", "ap": [], "nt": "カリフォルニア州"}, {"c": "SEA", "nm": "シアトル", "ct": "米国", "rg": "北米", "ap": [], "nt": ""}, {"c": "ANC", "nm": "アンカレッジ", "ct": "米国", "rg": "北米", "ap": [], "nt": ""}, {"c": "HNL", "nm": "ホノルル", "ct": "米国（ハワイ州）", "rg": "北米", "ap": [], "nt": ""}, {"c": "GUM", "nm": "グアム", "ct": "米国（グアム）", "rg": "北米", "ap": [], "nt": ""}, {"c": "SPN", "nm": "サイパン", "ct": "米国（北マリアナ諸島）", "rg": "北米", "ap": [], "nt": ""}, {"c": "YTO", "nm": "トロント", "ct": "カナダ", "rg": "北米", "ap": [["YYZ", "ピアソン"]], "nt": ""}, {"c": "YMQ", "nm": "モントリオール", "ct": "カナダ", "rg": "北米", "ap": [["YUL", ""]], "nt": ""}, {"c": "YVR", "nm": "バンクーバー", "ct": "カナダ", "rg": "北米", "ap": [], "nt": ""}, {"c": "YYC", "nm": "カルガリー", "ct": "カナダ", "rg": "北米", "ap": [], "nt": ""}, {"c": "YEA", "nm": "エドモントン", "ct": "カナダ", "rg": "北米", "ap": [["YEG", ""]], "nt": ""}, {"c": "MEX", "nm": "メキシコシティ", "ct": "メキシコ", "rg": "中南米", "ap": [], "nt": ""}, {"c": "CUN", "nm": "カンクン", "ct": "メキシコ", "rg": "中南米", "ap": [], "nt": ""}, {"c": "LIM", "nm": "リマ", "ct": "ペルー", "rg": "中南米", "ap": [], "nt": ""}, {"c": "SAO", "nm": "サンパウロ", "ct": "ブラジル", "rg": "中南米", "ap": [["GRU", "グアルーリョス"], ["CGH", "コンゴーニャス"]], "nt": ""}, {"c": "RIO", "nm": "リオデジャネイロ", "ct": "ブラジル", "rg": "中南米", "ap": [["GIG", ""], ["SDU", ""]], "nt": ""}, {"c": "BUE", "nm": "ブエノスアイレス", "ct": "アルゼンチン", "rg": "中南米", "ap": [["EZE", ""], ["AEP", ""]], "nt": ""}, {"c": "SCL", "nm": "サンティアゴ", "ct": "チリ", "rg": "中南米", "ap": [], "nt": ""}, {"c": "SYD", "nm": "シドニー", "ct": "オーストラリア", "rg": "オセアニア", "ap": [], "nt": ""}, {"c": "MEL", "nm": "メルボルン", "ct": "オーストラリア", "rg": "オセアニア", "ap": [], "nt": ""}, {"c": "BNE", "nm": "ブリスベン", "ct": "オーストラリア", "rg": "オセアニア", "ap": [], "nt": ""}, {"c": "OOL", "nm": "ゴールドコースト", "ct": "オーストラリア", "rg": "オセアニア", "ap": [], "nt": ""}, {"c": "CNS", "nm": "ケアンズ", "ct": "オーストラリア", "rg": "オセアニア", "ap": [], "nt": ""}, {"c": "AYQ", "nm": "エアーズロック", "ct": "オーストラリア", "rg": "オセアニア", "ap": [], "nt": ""}, {"c": "PER", "nm": "パース", "ct": "オーストラリア", "rg": "オセアニア", "ap": [], "nt": ""}, {"c": "ADL", "nm": "アデレード", "ct": "オーストラリア", "rg": "オセアニア", "ap": [], "nt": ""}, {"c": "DRW", "nm": "ダーウィン", "ct": "オーストラリア", "rg": "オセアニア", "ap": [], "nt": ""}, {"c": "AKL", "nm": "オークランド", "ct": "ニュージーランド", "rg": "オセアニア", "ap": [], "nt": "ニュージーランド"}, {"c": "CHC", "nm": "クライストチャーチ", "ct": "ニュージーランド", "rg": "オセアニア", "ap": [], "nt": ""}, {"c": "ZQN", "nm": "クイーンズタウン", "ct": "ニュージーランド", "rg": "オセアニア", "ap": [], "nt": ""}, {"c": "NAN", "nm": "ナンディ", "ct": "フィジー", "rg": "オセアニア", "ap": [], "nt": "フィジー"}, {"c": "NOU", "nm": "ヌメア", "ct": "ニューカレドニア（フランス領）", "rg": "オセアニア", "ap": [], "nt": ""}, {"c": "PPT", "nm": "パペーテ", "ct": "フランス領ポリネシア", "rg": "オセアニア", "ap": [], "nt": "タヒチ"}], "cconf": [["OAK", "オークランド（米国カリフォルニア州）", "オークランド（ニュージーランド）は AKL"], ["CAN", "広州（中国）", "カンクン（メキシコ）は CUN"], ["SAN", "サンディエゴ（米国）", "サンパウロは SAO、サンティアゴ（チリ）は SCL"], ["PNH", "プノンペン（カンボジア）", "ホーチミンシティ（ベトナム）は SGN"], ["IAH", "ヒューストン（米国）の空港", "ワシントンの空港は IAD・DCA・BWI"], ["LIN", "ミラノの空港", "ローマの空港は FCO・CIA"], ["LAX", "ロサンゼルス", "LOS はナイジェリアのラゴス"], ["LGW／LGA", "LGW＝ロンドン・ガトウィック、LGA＝ニューヨーク・ラガーディア", ""], ["YTO／YYZ", "トロントの都市コード／空港コード", "カナダのコードは Y で始まるものが多い"]], "sc": [{"nm": "オーストリア", "eu": 1, "sc": 1, "cur": "ユーロ", "cs": "ユーロ", "old": "", "os": "", "nt": "", "g": [4, 4]}, {"nm": "ベルギー", "eu": 1, "sc": 1, "cur": "ユーロ", "cs": "ユーロ", "old": "", "os": "", "nt": "", "g": [2, 3]}, {"nm": "ブルガリア", "eu": 1, "sc": 1, "cur": "ユーロ", "cs": "ユーロ", "old": "レフ（2026年1月1日にユーロへ）", "os": "レフ", "nt": "2025年1月1日にシェンゲン協定に完全加盟、2026年1月1日にユーロ導入。", "g": [6, 5]}, {"nm": "クロアチア", "eu": 1, "sc": 1, "cur": "ユーロ", "cs": "ユーロ", "old": "クーナ（2023年1月1日にユーロへ）", "os": "クーナ", "nt": "2023年1月1日にシェンゲン協定加盟とユーロ導入。", "g": [5, 5]}, {"nm": "エストニア", "eu": 1, "sc": 1, "cur": "ユーロ", "cs": "ユーロ", "old": "クローン（2011年にユーロへ）", "os": "クローン", "nt": "", "g": [6, 1]}, {"nm": "フィンランド", "eu": 1, "sc": 1, "cur": "ユーロ", "cs": "ユーロ", "old": "", "os": "", "nt": "", "g": [6, 0]}, {"nm": "フランス", "eu": 1, "sc": 1, "cur": "ユーロ", "cs": "ユーロ", "old": "", "os": "", "nt": "", "g": [1, 4]}, {"nm": "ドイツ", "eu": 1, "sc": 1, "cur": "ユーロ", "cs": "ユーロ", "old": "", "os": "", "nt": "", "g": [4, 2]}, {"nm": "ギリシャ", "eu": 1, "sc": 1, "cur": "ユーロ", "cs": "ユーロ", "old": "", "os": "", "nt": "", "g": [5, 6]}, {"nm": "イタリア", "eu": 1, "sc": 1, "cur": "ユーロ", "cs": "ユーロ", "old": "", "os": "", "nt": "", "g": [3, 5]}, {"nm": "ラトビア", "eu": 1, "sc": 1, "cur": "ユーロ", "cs": "ユーロ", "old": "ラッツ（2014年にユーロへ）", "os": "ラッツ", "nt": "", "g": [6, 2]}, {"nm": "リトアニア", "eu": 1, "sc": 1, "cur": "ユーロ", "cs": "ユーロ", "old": "リタス（2015年にユーロへ）", "os": "リタス", "nt": "", "g": [6, 3]}, {"nm": "ルクセンブルク", "eu": 1, "sc": 1, "cur": "ユーロ", "cs": "ユーロ", "old": "", "os": "", "nt": "", "g": [3, 3]}, {"nm": "マルタ", "eu": 1, "sc": 1, "cur": "ユーロ", "cs": "ユーロ", "old": "", "os": "", "nt": "", "g": [4, 6]}, {"nm": "オランダ", "eu": 1, "sc": 1, "cur": "ユーロ", "cs": "ユーロ", "old": "", "os": "", "nt": "", "g": [3, 2]}, {"nm": "ポルトガル", "eu": 1, "sc": 1, "cur": "ユーロ", "cs": "ユーロ", "old": "", "os": "", "nt": "", "g": [0, 5]}, {"nm": "スロバキア", "eu": 1, "sc": 1, "cur": "ユーロ", "cs": "ユーロ", "old": "コルナ（2009年にユーロへ）", "os": "コルナ", "nt": "", "g": [5, 3]}, {"nm": "スロベニア", "eu": 1, "sc": 1, "cur": "ユーロ", "cs": "ユーロ", "old": "", "os": "", "nt": "", "g": [4, 5]}, {"nm": "スペイン", "eu": 1, "sc": 1, "cur": "ユーロ", "cs": "ユーロ", "old": "", "os": "", "nt": "", "g": [1, 5]}, {"nm": "スウェーデン", "eu": 1, "sc": 1, "cur": "スウェーデン・クローナ", "cs": "クローナ", "old": "", "os": "", "nt": "", "g": [5, 0]}, {"nm": "デンマーク", "eu": 1, "sc": 1, "cur": "デンマーク・クローネ", "cs": "クローネ", "old": "", "os": "", "nt": "", "g": [4, 1]}, {"nm": "チェコ", "eu": 1, "sc": 1, "cur": "チェコ・コルナ", "cs": "コルナ", "old": "", "os": "", "nt": "", "g": [4, 3]}, {"nm": "ハンガリー", "eu": 1, "sc": 1, "cur": "フォリント", "cs": "フォリント", "old": "", "os": "", "nt": "", "g": [5, 4]}, {"nm": "ポーランド", "eu": 1, "sc": 1, "cur": "ズウォティ", "cs": "ズウォティ", "old": "", "os": "", "nt": "", "g": [5, 2]}, {"nm": "ルーマニア", "eu": 1, "sc": 1, "cur": "ルーマニア・レウ（複数形レイ）", "cs": "レウ", "old": "", "os": "", "nt": "2025年1月1日にシェンゲン協定に完全加盟。", "g": [6, 4]}, {"nm": "アイスランド", "eu": 0, "sc": 1, "cur": "アイスランド・クローナ", "cs": "クローナ", "old": "", "os": "", "nt": "", "g": [0, 0]}, {"nm": "ノルウェー", "eu": 0, "sc": 1, "cur": "ノルウェー・クローネ", "cs": "クローネ", "old": "", "os": "", "nt": "", "g": [4, 0]}, {"nm": "スイス", "eu": 0, "sc": 1, "cur": "スイス・フラン", "cs": "フラン", "old": "", "os": "", "nt": "", "g": [2, 4]}, {"nm": "リヒテンシュタイン", "eu": 0, "sc": 1, "cur": "スイス・フラン", "cs": "フラン", "old": "", "os": "", "nt": "", "g": [3, 4]}, {"nm": "アイルランド", "eu": 1, "sc": 0, "cur": "ユーロ", "cs": "ユーロ", "old": "", "os": "", "nt": "", "g": [0, 1]}, {"nm": "キプロス", "eu": 1, "sc": 0, "cur": "ユーロ", "cs": "ユーロ", "old": "", "os": "", "nt": "シェンゲン協定の適用に向けた手続中（2026年8月1日現在は非加盟）。", "g": [6, 6]}, {"nm": "英国", "eu": 0, "sc": 0, "cur": "英ポンド", "cs": "ポンド", "old": "", "os": "", "nt": "2020年1月31日にEUを離脱。", "g": [1, 1]}, {"nm": "モナコ", "eu": 0, "sc": 0, "cur": "ユーロ", "cs": "ユーロ", "old": "", "os": "", "nt": "EU非加盟。EUとの協定でユーロを使用。", "g": [2, 5]}, {"nm": "サンマリノ", "eu": 0, "sc": 0, "cur": "ユーロ", "cs": "ユーロ", "old": "", "os": "", "nt": "EU非加盟。EUとの協定でユーロを使用。", "g": [2, 6]}, {"nm": "バチカン", "eu": 0, "sc": 0, "cur": "ユーロ", "cs": "ユーロ", "old": "", "os": "", "nt": "EU非加盟。EUとの協定でユーロを使用。", "g": [3, 6]}, {"nm": "アンドラ", "eu": 0, "sc": 0, "cur": "ユーロ", "cs": "ユーロ", "old": "", "os": "", "nt": "EU非加盟。EUとの協定でユーロを使用。", "g": [1, 6]}], "ex": [{"id": "R7-O-47", "tag": "令和7年度 問47", "stem": "次のヨーロッパ各国のシェンゲン協定の加盟状況とその国の通貨との組合せのうち、誤っているものはどれか。", "at": "P05-2", "it": [{"k": "a", "t": "アイルランド−非加盟−ユーロ", "ok": true, "why": "アイルランドは EU 加盟国でユーロを使うが、シェンゲン協定には加盟していない。"}, {"k": "b", "t": "スロバキア−加盟−コルナ", "ok": false, "why": "スロバキアの通貨はユーロ。コルナはチェコの通貨（スロバキアは2009年にコルナからユーロに切り替えた）。"}, {"k": "c", "t": "ブルガリア−加盟−レフ", "ok": false, "why": "原題の「ブルガリア−加盟−レフ」は出題時は正しい組合せだった。ブルガリアは2026年1月1日にユーロを導入した。原題の選択肢 c（通貨レフ）は現行では誤りとなり、誤っているものが2つになるため、c の通貨をユーロに改めた。正解は b のまま。"}, {"k": "d", "t": "ベルギー−加盟−ユーロ", "ok": true, "why": "ベルギーはシェンゲン協定に加盟し、ユーロを使う。"}]}, {"id": "R7-O-51", "tag": "令和7年度 問51", "stem": "次の都市と、都市コード及びその都市の空港コードとの組合せのうち、正しい組合せをすべて選びなさい。", "at": "P04-3", "it": [{"k": "a", "t": "ワシントン（アメリカ合衆国）−WAS−IAH", "ok": false, "why": "IAH はヒューストンの空港。ワシントンの空港はダレス（IAD）、レーガン・ナショナル（DCA）、ボルチモア（BWI）。"}, {"k": "b", "t": "ローマ（イタリア）−ROM−LIN", "ok": false, "why": "LIN はミラノのリナーテ空港。ローマの空港はフィウミチーノ（FCO）など。"}, {"k": "c", "t": "上海（中国）−SHA−PVG", "ok": true, "why": "上海の都市コードは SHA で、浦東空港の空港コードは PVG。"}]}, {"id": "R7-O-52", "tag": "令和7年度 問52", "stem": "次のアライアンス（航空連合）と航空会社コードとの組合せのうち、航空会社コード①及び②の航空会社の両方が当該アライアンスに加盟しているものをすべて選びなさい。", "at": "P04-2", "it": [{"k": "a", "t": "oneworld−MH−QF", "ok": true, "why": "マレーシア航空（MH）とカンタス航空（QF）は、どちらも oneworld の加盟社。"}, {"k": "b", "t": "Sky Team−DL−GA", "ok": true, "why": "デルタ航空（DL）とガルーダ・インドネシア航空（GA）は、どちらも SkyTeam の加盟社。"}, {"k": "c", "t": "Star Alliance−LX−SK", "ok": false, "why": "スイス（LX）は Star Alliance だが、スカンジナビア航空（SK）は2024年9月1日から SkyTeam の加盟社。"}]}, {"id": "R6-O-47", "tag": "令和6年度 問47", "stem": "次のヨーロッパ各国のシェンゲン協定加盟状況とその国の通貨との組合せのうち、誤っているものはどれか。", "at": "P05-2", "it": [{"k": "a", "t": "エストニア−加盟−ユーロ", "ok": true, "why": "エストニアはシェンゲン協定に加盟し、ユーロを使う。"}, {"k": "b", "t": "ギリシア−加盟−ユーロ", "ok": true, "why": "ギリシアはシェンゲン協定に加盟し、ユーロを使う。"}, {"k": "c", "t": "ノルウェー−加盟−クローネ", "ok": true, "why": "ノルウェーは EU に加盟していないが、シェンゲン協定には加盟している。通貨はクローネ。"}, {"k": "d", "t": "ハンガリー−非加盟−フォリント", "ok": false, "why": "ハンガリーはシェンゲン協定の加盟国である。通貨のフォリントは正しい。"}]}, {"id": "R6-O-51", "tag": "令和6年度 問51", "stem": "次の都市と都市コード及びその都市の空港コードとの組合せのうち、正しい組合せをすべて選びなさい。", "at": "P04-3", "it": [{"k": "a", "t": "トロント（カナダ）−YTO−YYZ", "ok": true, "why": "トロントの都市コードは YTO、ピアソン空港は YYZ。"}, {"k": "b", "t": "ミラノ（イタリア）−MIL−FCO", "ok": false, "why": "FCO はローマのフィウミチーノ空港。ミラノの空港はマルペンサ（MXP）、リナーテ（LIN）など。"}, {"k": "c", "t": "ソウル（韓国）−SEL−GMP", "ok": true, "why": "ソウルの都市コードは SEL、金浦空港は GMP（仁川空港は ICN）。"}]}, {"id": "R6-O-52", "tag": "令和6年度 問52", "stem": "次のアライアンス（航空連合）と航空会社コードとの組合せのうち、航空会社コード①及び②の航空会社の両方が当該アライアンスに加盟しているものをすべて選びなさい。", "at": "P04-2", "it": [{"k": "a", "t": "oneworld−UA−UL", "ok": false, "why": "スリランカ航空（UL）は oneworld だが、ユナイテッド航空（UA）は Star Alliance。"}, {"k": "b", "t": "SkyTeam−AM−AZ", "ok": false, "why": "アエロメヒコ航空（AM）は SkyTeam だが、ITAエアウェイズ（AZ）は2025年にスカイチームを脱退し、2026年4月1日に Star Alliance に加盟した。"}, {"k": "c", "t": "Star Alliance−OS−OZ", "ok": true, "why": "オーストリア航空（OS）とアシアナ航空（OZ）は、どちらも Star Alliance の加盟社。"}]}, {"id": "R5-O-47", "tag": "令和5年度 問47", "stem": "次のヨーロッパ各国のシェンゲン協定加盟状況とその国の通貨との組合せのうち、誤っているものはどれか。", "at": "P05-2", "it": [{"k": "a", "t": "イギリス−非加盟−ポンド", "ok": true, "why": "英国はシェンゲン協定に加盟しておらず、通貨はポンド。"}, {"k": "b", "t": "クロアチア−加盟−ユーロ", "ok": true, "why": "クロアチアは2023年1月1日にシェンゲン協定に加盟し、同日ユーロを導入した。"}, {"k": "c", "t": "スウェーデン−加盟−クローナ", "ok": true, "why": "スウェーデンはシェンゲン協定に加盟しているが、ユーロは導入しておらず、通貨はクローナ。"}, {"k": "d", "t": "ポーランド−加盟−ユーロ", "ok": false, "why": "ポーランドはシェンゲン協定に加盟しているが、ユーロは導入しておらず、通貨はズウォティ。"}]}, {"id": "R5-O-48", "tag": "令和5年度 問48", "stem": "次の航空会社の航空会社コードと加盟するアライアンス（航空連合）との組合せのうち、正しいものはどれか。", "at": "P04-2", "it": [{"k": "a", "t": "Air Canada−AC−Star Alliance", "ok": true, "why": "エア・カナダ（AC）は Star Alliance の加盟社。"}, {"k": "b", "t": "Finnair−FJ−oneworld", "ok": false, "why": "フィンエアーのコードは AY。FJ はフィジー・エアウェイズ（どちらも oneworld）。"}, {"k": "c", "t": "Korean Air−KE−oneworld", "ok": false, "why": "大韓航空（KE）は SkyTeam の加盟社。"}, {"k": "d", "t": "Turkish Airlines−TK−SkyTeam", "ok": false, "why": "ターキッシュ エアラインズ（TK）は Star Alliance の加盟社。"}]}, {"id": "R5-O-52", "tag": "令和5年度 問52", "stem": "次の国名と都市コードとの組合せのうち、2つの都市コードの両方が当該国の都市として所在しているものをすべて選びなさい。", "at": "P04-3", "it": [{"k": "a", "t": "エジプト−CAI−LXR", "ok": true, "why": "CAI はカイロ、LXR はルクソールで、どちらもエジプトの都市。"}, {"k": "b", "t": "フランス−MRS−NCE", "ok": true, "why": "MRS はマルセイユ、NCE はニースで、どちらもフランスの都市。"}, {"k": "c", "t": "ベトナム−PNH−SGN", "ok": false, "why": "SGN はベトナムのホーチミンシティだが、PNH はカンボジアのプノンペン。"}]}, {"id": "R4-O-47", "tag": "令和4年度 問47", "stem": "次のヨーロッパ各国のシェンゲン協定加盟状況とその国の通貨との組合せのうち、正しいものはどれか。", "at": "P05-2", "it": [{"k": "a", "t": "アイルランド−加盟−ユーロ", "ok": false, "why": "アイルランドは EU 加盟国でユーロを使うが、シェンゲン協定には加盟していない。"}, {"k": "b", "t": "スイス−加盟−ユーロ", "ok": false, "why": "スイスはシェンゲン協定に加盟しているが、EU 非加盟で、通貨はスイス・フラン。"}, {"k": "c", "t": "デンマーク−加盟−クローネ", "ok": true, "why": "デンマークはシェンゲン協定に加盟しているが、ユーロは導入しておらず、通貨はデンマーク・クローネ。"}, {"k": "d", "t": "ルーマニア−非加盟−ユーロ", "ok": false, "why": "ルーマニアの通貨はルーマニア・レウ（複数形レイ）。また、現行ではシェンゲン協定の加盟国である（出題時は非加盟）。"}]}, {"id": "R4-O-48", "tag": "令和4年度 問48", "stem": "次の航空会社の航空会社コードと加盟するアライアンス（航空連合）との組合せのうち、正しいものはどれか。", "at": "P04-2", "it": [{"k": "a", "t": "British Airways−BA−SkyTeam", "ok": false, "why": "ブリティッシュ・エアウェイズ（BA）は oneworld の加盟社。"}, {"k": "b", "t": "Swiss International Air Lines−SK−Star Alliance", "ok": false, "why": "スイス インターナショナル エアラインズのコードは LX。SK はスカンジナビア航空。"}, {"k": "c", "t": "Iberia−IB−oneworld", "ok": true, "why": "イベリア航空（IB）は oneworld の加盟社。"}, {"k": "d", "t": "LOT Polish Airlines−LO−oneworld", "ok": false, "why": "LOTポーランド航空（LO）は Star Alliance の加盟社。"}]}, {"id": "R4-O-52", "tag": "令和4年度 問52", "stem": "次の国名と都市コードとの組合せのうち、2つの都市コードの両方が当該国の都市として所在しているものをすべて選びなさい。", "at": "P04-3", "it": [{"k": "a", "t": "オーストラリア−AYQ−OOL", "ok": true, "why": "AYQ はエアーズロック、OOL はゴールドコーストで、どちらもオーストラリアの都市。"}, {"k": "b", "t": "スペイン−MAD−GRX", "ok": true, "why": "MAD はマドリード、GRX はグラナダで、どちらもスペインの都市。"}, {"k": "c", "t": "メキシコ−MEX−CAN", "ok": false, "why": "MEX はメキシコシティだが、CAN は中国の広州。カンクンは CUN。"}]}, {"id": "R3-O-49", "tag": "令和3年度 問49", "stem": "次の国名と都市コードとの組合せのうち、2つの都市コードの両方が当該国の都市として所在しているものをすべて選びなさい。", "at": "P04-3", "it": [{"k": "a", "t": "アメリカ−MSY−ORL", "ok": true, "why": "MSY はニューオーリンズ、ORL はオーランドで、どちらも米国の都市。"}, {"k": "b", "t": "アラブ首長国連邦−AUH−DXB", "ok": true, "why": "AUH はアブダビ、DXB はドバイで、どちらもアラブ首長国連邦の都市。"}, {"k": "c", "t": "ニュージーランド−CHC−OAK", "ok": false, "why": "CHC はニュージーランドのクライストチャーチだが、OAK は米国カリフォルニア州のオークランド。ニュージーランドのオークランドは AKL。"}]}, {"id": "R3-O-50", "tag": "令和3年度 問50", "stem": "次の航空会社コードと航空会社名との組合せのうち、正しいものをすべて選びなさい。", "at": "P04-1", "it": [{"k": "a", "t": "QR−Qatar Airways", "ok": true, "why": "QR はカタール航空（oneworld）。"}, {"k": "b", "t": "SB−Aircalin（Air Caledonie International）", "ok": true, "why": "SB はエアカラン（ニューカレドニア）。"}, {"k": "c", "t": "VN−Vietnam Airlines", "ok": true, "why": "VN はベトナム航空（SkyTeam）。"}]}]}</script>
+<script>
+(function(){
+var D=JSON.parse(document.getElementById('DATA').textContent);
+var $=function(s,r){return(r||document).querySelector(s)},$$=function(s,r){return[].slice.call((r||document).querySelectorAll(s))};
+var E=function(t){return String(t==null?'':t).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+var KEY='codes_v1',S={};try{S=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){}S.r=S.r||{};
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+var ALN={S:'Star Alliance',T:'SkyTeam',O:'oneworld',N:'非加盟'},ALS={S:'Star',T:'SkyTeam',O:'oneworld',N:'非加盟'};
+var AL=D.al.filter(function(a){return!a.x}),ALL=D.al,BYC={};ALL.forEach(function(a){BYC[a.c]=a});
+function alb(k){return '<span class="al '+k+'">'+ALS[k]+'</span>'}
+function rnd(n){return Math.floor(Math.random()*n)}
+function shuf(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=rnd(i+1),t=a[i];a[i]=a[j];a[j]=t}return a}
+function pick(a){return a[rnd(a.length)]}
+
+/* ---------- タブ ---------- */
+function tab(t){$$('.tabs button[data-tab]').forEach(function(b){b.classList.toggle('on',b.dataset.tab===t)});$$('.pane').forEach(function(p){p.hidden=p.id!=='p-'+t});S.tab=t;save();window.scrollTo(0,0)}
+$$('.tabs button[data-tab]').forEach(function(b){b.onclick=function(){tab(b.dataset.tab)}});
+
+/* ---------- 隠す ---------- */
+function hideSet(c,on){document.body.classList.toggle(c,on);$$('[data-hide="'+c+'"]').forEach(function(b){b.classList.toggle('on',on)});S['h_'+c]=on;save();$$('.show').forEach(function(x){x.classList.remove('show')})}
+$$('[data-hide]').forEach(function(b){b.onclick=function(){hideSet(b.dataset.hide,!document.body.classList.contains(b.dataset.hide))}});
+document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('.chip,.cc,#alT tbody tr,.tile,.exl li');if(t)t.classList.toggle('show')});
+
+/* ---------- 早見表 ---------- */
+var RG=['日本','韓国','中国','香港・台湾','東南アジア','南アジア','中東','アフリカ','ヨーロッパ','北米','中南米','オセアニア','東アジア（その他）'];
+var mx='<thead><tr><th>地域</th>'+['S','T','O','N'].map(function(k){return '<th class="'+k+'">'+ALN[k]+'</th>'}).join('')+'</tr></thead><tbody>';
+RG.forEach(function(r){var row=AL.filter(function(a){return a.rg===r});if(!row.length)return;mx+='<tr><td class="rg">'+E(r==='東アジア（その他）'?'モンゴル':r)+'</td>'+['S','T','O','N'].map(function(k){return '<td>'+row.filter(function(a){return a.al===k}).map(function(a){return '<span class="chip '+k+'" title="'+E(a.en)+'"><b>'+a.c+'</b><span class="jn">'+E(a.ja)+'</span>'+(a.n?'<span class="nt">※</span>':'')+'</span>'}).join('')+'</td>'}).join('')+'</tr>'});
+$('#mx').innerHTML=mx+'</tbody>';
+var ml='';RG.forEach(function(r){var row=AL.filter(function(a){return a.rg===r});if(!row.length)return;ml+='<div class="mr"><div class="mrh">'+E(r==='東アジア（その他）'?'モンゴル':r)+'</div>'+['S','T','O','N'].map(function(k){var cs=row.filter(function(a){return a.al===k});return cs.length?'<div class="mrc">'+alb(k)+' '+cs.map(function(a){return '<span class="chip '+k+'"><b>'+a.c+'</b><span class="jn">'+E(a.ja)+'</span>'+(a.n?'<span class="nt">※</span>':'')+'</span>'}).join('')+'</div>':''}).join('')+'</div>'});
+$('#mxm').innerHTML=ml;
+/* 航空会社一覧 */
+var alSort='c',alF='';
+function alTable(){var rows=ALL.slice().filter(function(a){return !alF||a.al===alF});rows.sort(function(a,b){return alSort==='c'?a.c.localeCompare(b.c):(RG.indexOf(a.rg)-RG.indexOf(b.rg))||a.c.localeCompare(b.c)});
+$('#alT tbody').innerHTML=rows.map(function(a){return '<tr'+(a.x?' class="x"':'')+'><td><span class="code hcd">'+a.c+'</span></td><td><span class="hnm">'+E(a.ja)+'</span></td><td>'+E(a.en)+'</td><td>'+E(a.ct)+'</td><td>'+(a.al?alb(a.al):'<span class="note">（取り違え例）</span>')+'</td><td class="note">'+E([a.o?'コードの由来：'+a.o:'',a.n||''].filter(Boolean).join(' '))+'</td></tr>'}).join('');
+$('#alCnt').textContent=AL.length+'社（2026年8月1日現在）'}
+$$('[data-sort]').forEach(function(b){b.onclick=function(){alSort=b.dataset.sort;$$('[data-sort]').forEach(function(x){x.classList.toggle('on',x===b)});alTable()}});
+$$('[data-alf]').forEach(function(b){b.onclick=function(){alF=b.dataset.alf;$$('[data-alf]').forEach(function(x){x.classList.toggle('on',x===b)});alTable()}});
+alTable();
+$('#cfT tbody').innerHTML=D.conf.map(function(g){return '<tr><td class="code">'+g.join(' ／ ')+'</td><td>'+g.map(function(c){var a=BYC[c];return a?'<span class="code">'+c+'</span> '+E(a.ja)+(a.al?' '+alb(a.al):'（'+E(a.ct)+'）'):c}).join('、')+'</td></tr>'}).join('');
+$('#ccT tbody').innerHTML=D.cconf.map(function(r){return '<tr><td class="code">'+E(r[0])+'</td><td>'+E(r[1])+'</td><td>'+E(r[2])+'</td></tr>'}).join('');
+/* 都市 */
+var crg=[];D.ci.forEach(function(c){if(crg.indexOf(c.rg)<0)crg.push(c.rg)});
+$('#ciL').innerHTML=crg.map(function(r){return '<h3>'+E(r)+'</h3><div class="cg">'+D.ci.filter(function(c){return c.rg===r}).map(function(c){var nt=c.nt&&c.nt!==c.ct?'（'+c.nt+'）':'';return '<div class="cc"><div class="t"><b>'+c.c+'</b><span class="nm2">'+E(c.nm)+E(nt)+'</span></div><div class="ct">'+E(c.ct)+'</div>'+(c.ap.length?'<div class="ap">'+c.ap.map(function(a){return '<span><span class="code">'+a[0]+'</span> <span class="an">'+E(a[1]||'')+'</span></span>'}).join('')+'</div>':'')+'</div>'}).join('')+'</div>'}).join('');
+$('#ciCnt').textContent=D.ci.length+'都市';
+/* シェンゲン */
+function kind(c){if(c.sc&&c.cs==='ユーロ')return 1;if(c.sc&&c.eu)return 2;if(c.sc)return 3;if(c.eu)return 4;if(c.cs==='ユーロ')return 6;return 5}
+var KN={1:'シェンゲン加盟・ユーロ',2:'シェンゲン加盟・EU加盟・ユーロ未導入',3:'シェンゲン加盟・EU非加盟',4:'EU加盟・シェンゲン非加盟',5:'EU・シェンゲンとも非加盟',6:'EU非加盟・ユーロ使用'};
+var g='';D.sc.forEach(function(c,i){if(!c.g)return;var k=kind(c);g+='<div class="tile k'+k+(k===6?' sm':'')+'" data-i="'+i+'" style="grid-column:'+(c.g[0]+1)+';grid-row:'+(c.g[1]+1)+'"><span class="n">'+E(c.nm)+'</span><span class="c">'+E(c.cs)+'</span></div>'});
+$('#sgrid').innerHTML=g;
+$('#sgrid').addEventListener('click',function(e){var t=e.target.closest('.tile');if(!t)return;var c=D.sc[+t.dataset.i],b=$('#sgInfo');b.className='fb ok';b.innerHTML='<div class="h">'+E(c.nm)+'</div>EU：'+(c.eu?'加盟':'非加盟')+'　シェンゲン協定：'+(c.sc?'加盟':'非加盟')+'　通貨：'+E(c.cur)+(c.old?'<br>旧通貨：'+E(c.old):'')+(c.nt?'<br>'+E(c.nt):'')});
+$('#sgT tbody').innerHTML=D.sc.slice().sort(function(a,b){return kind(a)-kind(b)}).map(function(c){return '<tr><td>'+E(c.nm)+'</td><td>'+(c.eu?'加盟':'非加盟')+'</td><td>'+(c.sc?'加盟':'<b>非加盟</b>')+'</td><td>'+E(c.cur)+'</td><td class="note">'+E([c.old?'旧通貨 '+c.old:'',c.nt].filter(Boolean).join(' '))+'</td></tr>'}).join('');
+
+/* ---------- 本試験 ---------- */
+$('#exL').innerHTML=D.ex.map(function(q){return '<div class="exq"><div class="h">'+E(q.tag)+'</div><div class="s">'+E(q.stem)+'</div><ul class="exl">'+q.it.map(function(it){return '<li><span class="t">'+E(it.t)+'</span><span><span class="v '+(it.ok?'o':'x')+'">'+(it.ok?'正しい':'誤り')+'</span></span><span class="w">'+E(it.why)+'</span></li>'}).join('')+'</ul></div>'}).join('');
+$('#exCnt').textContent=D.ex.length+'問・'+D.ex.reduce(function(s,q){return s+q.it.length},0)+'の組合せ';
+function heSet(on){document.body.classList.toggle('he',on);$('#bHe').classList.toggle('on',on);$('#bHe').textContent=on?'正誤を表示':'正誤を隠す';S.he=on;save()}
+$('#bHe').onclick=function(){heSet(!document.body.classList.contains('he'))};
+
+/* ---------- ドリル ---------- */
+var SCX=D.sc.filter(function(c){return kind(c)!==6});
+var CIA=D.ci.filter(function(c){return c.ap.length>=2});
+var CURS=['ユーロ','クローナ','クローネ','コルナ','フォリント','ズウォティ','レウ','フラン','ポンド','レフ','クーナ'];
+function alName(a){return a.ja+'（'+a.en+'）'}
+function cityName(c){return c.nm+'（'+c.ct+'）'}
+function simCodes(code,pool){var g=D.conf.filter(function(x){return x.indexOf(code)>=0})[0]||[];var out=g.filter(function(x){return x!==code&&pool.indexOf(x)>=0});
+ var sh=shuf(pool.filter(function(x){return x!==code&&out.indexOf(x)<0&&(x[0]===code[0]||x[1]===code[1])}));out=out.concat(sh);
+ out=out.concat(shuf(pool.filter(function(x){return x!==code&&out.indexOf(x)<0})));return out.slice(0,3)}
+var ALC=AL.map(function(a){return a.c}),ALLC=ALL.map(function(a){return a.c}),CIC=D.ci.map(function(c){return c.c});
+var CONFC={OAK:['AKL'],AKL:['OAK'],CAN:['CUN'],CUN:['CAN'],SAN:['SAO','SCL'],SAO:['SAN','SCL'],SCL:['SAN','SAO'],PNH:['SGN'],SGN:['PNH']};
+function simCity(c){var out=(CONFC[c.c]||[]).slice();var p=shuf(CIC.filter(function(x){return x!==c.c&&out.indexOf(x)<0&&(x[0]===c.c[0]||x.slice(1)===c.c.slice(1)||x[2]===c.c[2])}));out=out.concat(p).concat(shuf(CIC.filter(function(x){return x!==c.c&&out.indexOf(x)<0})));return out.slice(0,3)}
+function bycity(code){return D.ci.filter(function(c){return c.c===code})[0]}
+
+var TYPES={
+ al1:{t:'航空会社コード → 航空会社',d:'2文字のコードから社名を選ぶ',items:function(){return AL.map(function(a){return a.c})},
+  make:function(k){var a=BYC[k],ds=simCodes(k,ALLC).map(function(c){return BYC[c]}),ch=shuf([a].concat(ds));return{q:'<span class="code">'+k+'</span>',kq:'この航空会社コードの航空会社は？',ch:ch.map(function(x){return E(alName(x))}),a:ch.indexOf(a),fb:fbAl(a)}}},
+ al2:{t:'航空会社 → 航空会社コード',d:'社名から2文字のコードを選ぶ',items:function(){return AL.map(function(a){return a.c})},
+  make:function(k){var a=BYC[k],ch=shuf([k].concat(simCodes(k,ALLC)));return{q:E(a.ja)+'<div class="note" style="font-size:14px;font-weight:400">'+E(a.en)+'／'+E(a.ct)+'</div>',kq:'この航空会社の航空会社コードは？',ch:ch.map(function(c){return '<span class="code">'+c+'</span>'}),a:ch.indexOf(k),c4:1,fb:fbAl(a)}}},
+ al3:{t:'航空会社 → アライアンス',d:'Star・SkyTeam・oneworld・非加盟を選ぶ',items:function(){return AL.map(function(a){return a.c})},
+  make:function(k){var a=BYC[k],ks=['S','T','O','N'];return{q:'<span class="code">'+k+'</span> '+E(a.ja),kq:'加盟しているアライアンスは？',ch:ks.map(function(x){return alb(x)}),a:ks.indexOf(a.al),c4:1,fb:fbAl(a)}}},
+ al4:{t:'本試験形式：アライアンス',d:'「Star Alliance − LX − SK」などの正誤',items:function(){return AL.filter(function(a){return a.al!=='N'}).map(function(a){return a.c})},
+  make:function(k){var a=BYC[k],truth=Math.random()<.5,form=Math.random()<.5;
+   if(form){var A=a.al,mates=AL.filter(function(x){return x.al===A&&x.c!==k}),others=AL.filter(function(x){return x.al!==A}),cf=(D.conf.filter(function(g){return g.indexOf(k)>=0})[0]||[]).map(function(c){return BYC[c]}).filter(function(x){return x&&x.al&&x.al!==A});
+    var b=truth?pick(mates):(cf.length&&Math.random()<.7?pick(cf):pick(others));var pair=shuf([a,b]);
+    return{q:exs([ALN[A],pair[0].c,pair[1].c]),kq:'アライアンスと航空会社コード①・②の組合せ。両方が当該アライアンスに加盟していれば正しい。',tf:1,a:truth?0:1,fb:fbAl(a)+fbAl(b)}}
+   var code=k,al=a.al;if(!truth){if(Math.random()<.5){var c2=simCodes(k,ALC)[0];code=c2}else{al=pick(['S','T','O'].filter(function(x){return x!==a.al}))}}
+   return{q:exs([a.en,code,ALN[al]]),kq:'航空会社と航空会社コード・加盟アライアンスの組合せ。',tf:1,a:truth?0:1,fb:fbAl(a)+(code!==k?fbAl(BYC[code]):'')}}},
+ ci1:{t:'都市 → 都市コード',d:'都市名から3文字の都市コードを選ぶ',items:function(){return CIC},
+  make:function(k){var c=bycity(k),ch=shuf([k].concat(simCity(c)));return{q:E(cityName(c)),kq:'この都市の都市コードは？',ch:ch.map(function(x){return '<span class="code">'+x+'</span>'}),a:ch.indexOf(k),c4:1,fb:fbCi(c)}}},
+ ci2:{t:'都市コード → 都市',d:'3文字の都市コードから都市を選ぶ',items:function(){return CIC},
+  make:function(k){var c=bycity(k),ds=simCity(c).map(bycity),ch=shuf([c].concat(ds));return{q:'<span class="code">'+k+'</span>',kq:'この都市コードの都市は？',ch:ch.map(function(x){return E(cityName(x))}),a:ch.indexOf(c),fb:fbCi(c)}}},
+ ci3:{t:'本試験形式：都市・空港コード',d:'「国名−コード−コード」「都市−都市コード−空港コード」の正誤',items:function(){return CIC},
+  make:function(k){var c=bycity(k),truth=Math.random()<.5;
+   var useAp=CIA.indexOf(c)>=0&&Math.random()<.6;
+   if(truth&&!useAp&&!D.ci.some(function(x){return x!==c&&x.ct.replace(/（.*/,'')===c.ct.replace(/（.*/,'')})){var cand=D.ci.filter(function(y){return D.ci.some(function(x){return x!==y&&x.ct.replace(/（.*/,'')===y.ct.replace(/（.*/,'')})});c=pick(cand)}
+   if(useAp){var ap=truth?pick(c.ap)[0]:pick(shuf(CIA.filter(function(x){return x!==c&&(x.ct===c.ct||x.rg===c.rg)})).concat(CIA.filter(function(x){return x!==c}))).ap[0][0];
+    if(!truth&&c.ap.some(function(a){return a[0]===ap}))truth=true;
+    return{q:exs([cityName(c),c.c,ap]),kq:'都市と都市コード及びその都市の空港コードの組合せ。',tf:1,a:truth?0:1,fb:fbCi(c)+(truth?'':fbAp(ap))}}
+   var bc=function(x){return x.ct.replace(/（.*/,'')},same=D.ci.filter(function(x){return bc(x)===bc(c)&&x!==c}),o;
+   if(truth&&same.length)o=pick(same);else{truth=false;var cf=(CONFC[c.c]||[]).map(bycity).filter(function(x){return bc(x)!==bc(c)});o=cf.length&&Math.random()<.6?pick(cf):pick(shuf(D.ci.filter(function(x){return bc(x)!==bc(c)&&x.rg===c.rg})).concat(D.ci.filter(function(x){return bc(x)!==bc(c)})))}
+   var pair=shuf([c,o]);return{q:exs([bc(c),pair[0].c,pair[1].c]),kq:'国名と都市コードの組合せ。2つの都市コードの両方が当該国の都市なら正しい。',tf:1,a:truth?0:1,fb:fbCi(c)+fbCi(o)}}},
+ sc1:{t:'シェンゲン協定の加盟・非加盟',d:'国ごとに加盟か非加盟かを選ぶ',items:function(){return SCX.map(function(c){return c.nm})},
+  make:function(k){var c=scBy(k);return{q:E(k),kq:'シェンゲン協定に加盟しているか？',ch:['加盟','非加盟'],a:c.sc?0:1,c4:0,fb:fbSc(c)}}},
+ sc2:{t:'国 → 通貨',d:'ユーロか各国の通貨かを選ぶ',items:function(){return SCX.map(function(c){return c.nm})},
+  make:function(k){var c=scBy(k),opts=[c.cs];if(c.os)opts.push(c.os);var near={'クローナ':['クローネ','コルナ'],'クローネ':['クローナ','コルナ'],'コルナ':['クローナ','クローネ'],'ユーロ':['クローネ','フラン']}[c.cs]||['ユーロ'];
+   near.forEach(function(x){if(opts.indexOf(x)<0)opts.push(x)});shuf(CURS).forEach(function(x){if(opts.indexOf(x)<0)opts.push(x)});opts=shuf(opts.slice(0,4));return{q:E(k),kq:'現在の通貨は？',ch:opts.map(E),a:opts.indexOf(c.cs),c4:1,fb:fbSc(c)}}},
+ sc3:{t:'本試験形式：シェンゲン協定と通貨',d:'「スロバキア − 加盟 − コルナ」などの正誤',items:function(){return SCX.map(function(c){return c.nm})},
+  make:function(k){var c=scBy(k),truth=Math.random()<.5,st=c.sc,cu=c.cs;
+   if(!truth){if(Math.random()<.45)st=!st;else cu=c.os||({'クローナ':'クローネ','クローネ':'クローナ','コルナ':'クローネ','ユーロ':pick(['クローネ','コルナ','フラン','レウ'])}[c.cs]||'ユーロ')}
+   var nm=k==='英国'?'イギリス':k;return{q:exs([nm,st?'加盟':'非加盟',cu]),kq:'ヨーロッパ各国のシェンゲン協定の加盟状況とその国の通貨の組合せ。',tf:1,a:truth?0:1,fb:fbSc(c)}}}
+};
+function scBy(n){return D.sc.filter(function(c){return c.nm===n})[0]}
+function exs(a){return '<span class="exs">'+a.map(function(x,i){return(i?'<span class="dash">−</span>':'')+'<span>'+E(x)+'</span>'}).join('')+'</span>'}
+function fbAl(a){if(!a)return '';return '<div><span class="code">'+a.c+'</span> '+E(a.ja)+'（'+E(a.en)+'、'+E(a.ct)+'） '+(a.al?alb(a.al):'')+(a.o?' <span class="note">由来：'+E(a.o)+'</span>':'')+(a.n?'<div class="note">'+E(a.n)+'</div>':'')+'</div>'}
+function fbCi(c){if(!c)return '';return '<div><span class="code">'+c.c+'</span> '+E(cityName(c))+(c.ap.length?' 空港：'+c.ap.map(function(a){return '<span class="code">'+a[0]+'</span>'+(a[1]?' '+E(a[1]):'')}).join('、'):'')+'</div>'}
+function fbAp(ap){var c=D.ci.filter(function(x){return x.ap.some(function(a){return a[0]===ap})})[0];return c?'<div><span class="code">'+ap+'</span> は '+E(c.nm)+'（'+E(c.ct)+'）の空港</div>':''}
+function fbSc(c){return '<div>'+E(c.nm)+'：EU '+(c.eu?'加盟':'非加盟')+'、シェンゲン協定 '+(c.sc?'加盟':'非加盟')+'、通貨 '+E(c.cur)+(c.old?'（旧通貨 '+E(c.old)+'）':'')+(c.nt?'<div class="note">'+E(c.nt)+'</div>':'')+'</div>'}
+
+var GROUPS=[['mix','おまかせ','全種類から、未出題と苦手を優先',Object.keys(TYPES)],['al','航空会社（4種類）','コード・社名・アライアンス・本試験形式',['al1','al2','al3','al4']],['ci','都市・空港（3種類）','都市コード・都市名・本試験形式',['ci1','ci2','ci3']],['sc','シェンゲン協定と通貨（3種類）','加盟状況・通貨・本試験形式',['sc1','sc2','sc3']]];
+Object.keys(TYPES).forEach(function(k){GROUPS.push([k,TYPES[k].t,TYPES[k].d,[k]])});
+function rec(t,i){return S.r[t+':'+i]||null}
+function lvl(t,i){var r=rec(t,i);return r?r.l:-1}
+function mastery(types){var n=0,m=0;types.forEach(function(t){TYPES[t].items().forEach(function(i){n++;if(lvl(t,i)>=2)m++})});return[m,n]}
+function renderDecks(){$('#decks').innerHTML=GROUPS.map(function(g){var ms=mastery(g[3]),p=ms[1]?Math.round(ms[0]/ms[1]*100):0;return '<button type="button" class="deck'+(cur&&cur.g===g[0]?' on':'')+'" data-g="'+g[0]+'"><div class="t">'+E(g[1])+'</div><div class="d">'+E(g[2])+'</div><div class="bar"><i style="width:'+p+'%"></i></div><div class="m">定着 '+ms[0]+'／'+ms[1]+'（'+p+'%）</div></button>'}).join('');
+ var all=mastery(Object.keys(TYPES));$('#pgAll').textContent='定着 '+Math.round(all[0]/all[1]*100)+'%';
+ $$('#decks .deck').forEach(function(b){b.onclick=function(){start(b.dataset.g,false)}})}
+var cur=null;
+function weight(t,i){var r=rec(t,i);if(!r)return 6;return Math.max(.4,(5-r.l)*1.3+r.w*.8)}
+function start(gid,weak){var g=GROUPS.filter(function(x){return x[0]===gid})[0]||GROUPS[0];var pool=[];g[3].forEach(function(t){TYPES[t].items().forEach(function(i){pool.push([t,i])})});
+ if(weak){pool=pool.filter(function(p){var r=rec(p[0],p[1]);return r&&r.w>0&&r.l<3});pool.sort(function(a,b){return rec(b[0],b[1]).w-rec(a[0],a[1]).w});if(!pool.length){$('#dNote').textContent='誤答の記録がない。';return}}
+ var q=[],used={};
+ if(weak)q=pool.slice(0,20);else{for(var n=0;n<20&&n<pool.length;n++){var tot=0,ws=pool.map(function(p){var w=used[p[0]+':'+p[1]]?0:weight(p[0],p[1]);tot+=w;return w});var r=Math.random()*tot,j=0;while(j<ws.length-1&&r>ws[j]){r-=ws[j];j++}used[pool[j][0]+':'+pool[j][1]]=1;q.push(pool[j])}}
+ cur={g:gid,q:q,pos:0,ok:0,ng:0,wrong:[]};$('#dNote').textContent='';renderDecks();showDecks(false);ask();$('#qbox').scrollIntoView({block:'start'})}
+function showDecks(on){$('#deckw').hidden=!on;$('#bDecks').hidden=on}
+$('#bDecks').onclick=function(){showDecks(true)};
+var lock=false,curQ=null;
+function ask(){if(cur.pos>=cur.q.length){finish();return}
+ var it=cur.q[cur.pos],T=TYPES[it[0]],m=T.make(it[1]);curQ={it:it,m:m};lock=false;
+ var ch=m.tf?['正しい','誤り']:m.ch;
+ $('#qbox').innerHTML='<div class="qtop"><span>'+E(T.t)+'</span><span>'+(cur.pos+1)+'／'+cur.q.length+'　正答 '+cur.ok+'　誤答 '+cur.ng+'</span></div><div class="qk">'+E(m.kq)+'</div><div class="qq">'+m.q+'</div><div class="ch'+(m.c4&&!m.tf?' c4':'')+'">'+ch.map(function(c,i){return '<button type="button" data-i="'+i+'"><span class="n">'+(i+1)+'</span><span>'+c+'</span></button>'}).join('')+'</div><div class="fb" id="fb"></div><button type="button" class="btn next" id="bNext">次へ（Enter）</button>';
+ $$('#qbox .ch button').forEach(function(b){b.onclick=function(){answer(+b.dataset.i)}});$('#bNext').onclick=next;}
+function answer(i){if(lock)return;lock=true;var m=curQ.m,it=curQ.it,ok=i===m.a,key=it[0]+':'+it[1],r=S.r[key]||{l:0,w:0,s:0};r.s++;
+ if(ok){r.l=Math.min(5,r.l+1);cur.ok++}else{r.l=0;r.w++;cur.ng++;if(cur.wrong.filter(function(x){return x===key}).length<1){cur.wrong.push(key);cur.q.splice(Math.min(cur.q.length,cur.pos+4),0,it)}}
+ r.t=Date.now();S.r[key]=r;save();
+ var bs=$$('#qbox .ch button');bs[m.a].classList.add('ok');if(!ok)bs[i].classList.add('ng');
+ var fb=$('#fb');fb.className='fb '+(ok?'ok':'ng');fb.innerHTML='<div class="h">'+(ok?'正解':'誤り。正解は「'+(m.tf?['正しい','誤り'][m.a]:m.ch[m.a].replace(/<[^>]+>/g,''))+'」')+'</div>'+m.fb;
+ if(ok&&!S.slow){setTimeout(function(){if(curQ&&curQ.it===it&&lock)next()},900)}else{$('#bNext').classList.add('on');$('#bNext').focus()}}
+function next(){if(!cur)return;cur.pos++;ask()}
+function finish(){var n=cur.ok+cur.ng;$('#qbox').innerHTML='<div class="done"><div class="big">'+cur.ok+'／'+n+'</div><p>正答率 '+(n?Math.round(cur.ok/n*100):0)+'%</p><button type="button" class="btn on" id="bAgain">同じドリルをもう1回</button> <button type="button" class="btn" id="bW2">苦手だけ</button></div>';
+ $('#bAgain').onclick=function(){start(cur.g,false)};$('#bW2').onclick=function(){start(cur.g,true)};renderDecks();showDecks(true)}
+$('#bWeak').onclick=function(){start(cur?cur.g:'mix',true)};
+$('#bReset').onclick=function(){if(confirmReset()){S.r={};save();renderDecks();$('#dNote').textContent='記録を消した。'}};
+var rs=0;function confirmReset(){rs++;if(rs<2){$('#dNote').textContent='もう一度押すと、ドリルの記録をすべて消す。';setTimeout(function(){rs=0},4000);return false}rs=0;return true}
+document.addEventListener('keydown',function(e){if($('#p-drill').hidden||!curQ||e.target.closest('input,textarea'))return;var k=e.key;
+ if(/^[1-4]$/.test(k)){var b=$$('#qbox .ch button')[+k-1];if(b&&!lock){e.preventDefault();b.click()}}
+ else if((k==='Enter'||k===' ')&&lock){e.preventDefault();next()}});
+window.__CD={T:TYPES,D:D};renderDecks();
+['hc','hn','hs'].forEach(function(c){if(S['h_'+c])hideSet(c,true)});heSet(!!S.he);tab(S.tab||'list');
+})();
+</script>
+</body></html>
