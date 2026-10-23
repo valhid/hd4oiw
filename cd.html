@@ -103,21 +103,139 @@ body.hs .tile:not(.show){background:#d9d2c2!important;color:#6b6457;border-color
 .v{display:inline-block;font-size:12px;font-weight:700;border-radius:4px;padding:0 6px;text-align:center}.v.o{color:var(--ok);background:var(--ok-bg)}.v.x{color:#fff;background:var(--ng)}
 body.he .exl li:not(.show) .v,body.he .exl li:not(.show) .w{visibility:hidden}
 .note{font-size:12.5px;color:var(--soft)}
-.top2{position:fixed;right:14px;bottom:14px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:12px;text-decoration:none;z-index:30}
+.top2{position:fixed;right:14px;bottom:62px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:12px;text-decoration:none;z-index:30}
 @media (max-width:640px){.mxw{display:none}#mxm{display:block}.qq{font-size:19px}.qq .code{font-size:26px}.ch button{font-size:15px;padding:9px 10px}.ch.c4{grid-template-columns:repeat(2,minmax(0,1fr))}.tile{min-height:52px}.tile .n{font-size:11.5px}.sgrid{gap:3px}.mx td{min-width:7em}}
 @media (prefers-reduced-motion:no-preference){.ch button{transition:background .12s}}
+[data-mk].mk{opacity:.42}
+.chip.mk::after,.cc.mk .t::after,.tile.mk .n::after{content:"済";font-size:10px;font-weight:700;color:#fff;background:#6b7a3a;border-radius:3px;padding:0 3px;margin-left:4px}
+tr.mk td:first-child::after,li.mk .t::after{content:"済";font-size:10px;font-weight:700;color:#fff;background:#6b7a3a;border-radius:3px;padding:0 3px;margin-left:4px}
+body.mkh .chip.mk,body.mkh .cc.mk,body.mkh tr.mk,body.mkh li.mk{display:none}
+body.mkh .tile.mk{visibility:hidden}
+body.mksel [data-mk]{cursor:copy}body.mksel [data-mk]:hover{outline:2px solid #6b7a3a;outline-offset:1px}
+.mkbar{position:sticky;top:51px;z-index:29;background:#eef3df;border:1px solid #c9d6a6;border-radius:8px;padding:6px 10px;margin:6px 0;font-size:13px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.mkbar[hidden]{display:none}.mkt{display:inline-flex;gap:6px;align-items:center;flex-wrap:wrap}
+tr.fo{display:none}.ckl{font-size:12.5px;display:inline-flex;align-items:center;gap:4px;cursor:pointer}
+:root{--surface:#fffdf9; --surface2:#f3f1ea; --sunken:#ebe8df; --rule:#d8dae6; --rule2:#e6e7ee; --ink2:#565a68; --ink3:#7d8190;
+  --shu:#7a1f1f; --shuSoft:#f4e2e0; --shuLine:#d3a9a3; --koke:#2f7d5b; --kokeSoft:#e3f2ea; --kokeLine:#9cc8b3;
+  --gothic:"Noto Sans JP",system-ui,sans-serif;}
+/* ============ マーカー・下線 ============ */
+.hlm{border-radius:2px;padding:0 .04em;box-decoration-break:clone;
+ -webkit-box-decoration-break:clone;cursor:pointer}
+.hlm-y{background:#FBEFA8}
+.hlm-g{background:#CFE9CE}
+.hlm-b{background:#CFE0F2}
+.hlm-p{background:#F7D5E0}
+.hlm-u{background:none;border-bottom:2px solid #A2382A;padding-bottom:1px}
+.hlm.flash{outline:2px solid var(--shu);outline-offset:2px;
+ animation:hlmFlash 1.4s ease-out}
+@keyframes hlmFlash{0%{outline-color:var(--shu)}100%{outline-color:transparent}}
+
+/* 文字を隠す（下線は対象外） */
+body.hlm-mask .hlm-y,body.hlm-mask .hlm-g,
+body.hlm-mask .hlm-b,body.hlm-mask .hlm-p{color:transparent}
+body.hlm-mask .hlm.peek{color:inherit}
+
+/* ---- 操作ボタン ---- */
+#hlmPop{position:absolute;z-index:9999;display:none;gap:2px;padding:4px;
+ background:var(--surface);border:1px solid var(--rule);border-radius:8px;
+ box-shadow:0 6px 24px -8px rgba(20,23,26,.35);font-family:var(--gothic)}
+#hlmPop.on{display:flex}
+#hlmPop button{display:flex;align-items:center;gap:4px;padding:5px 8px;
+ border:0;border-radius:6px;background:transparent;cursor:pointer;
+ font-size:12.5px;color:var(--ink);white-space:nowrap;font-family:inherit}
+#hlmPop button:hover{background:var(--surface2)}
+#hlmPop .sep{width:1px;background:var(--rule2);margin:2px 3px}
+#hlmPop.bottom{position:fixed;left:8px!important;right:8px;top:auto!important;
+ bottom:calc(8px + env(safe-area-inset-bottom));justify-content:center;
+ flex-wrap:wrap}
+
+.sw{display:inline-block;width:13px;height:13px;border-radius:3px;
+ border:1px solid rgba(20,23,26,.18)}
+.sw-y{background:#FBEFA8}.sw-g{background:#CFE9CE}
+.sw-b{background:#CFE0F2}.sw-p{background:#F7D5E0}
+.sw-u{background:none;border:0;border-bottom:2px solid #A2382A;
+ border-radius:0;height:9px}
+
+/* ---- 一覧を開くボタン ---- */
+#hlmFab{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));
+ z-index:9990;padding:9px 14px;border:1px solid var(--rule);border-radius:999px;
+ background:var(--surface);color:var(--ink);font-size:12.5px;cursor:pointer;
+ box-shadow:var(--shadow);font-family:var(--gothic)}
+#hlmFab:hover{background:var(--surface2)}
+
+/* ---- 一覧 ---- */
+#hlmPanel{position:fixed;right:0;top:0;bottom:0;width:min(380px,92vw);
+ z-index:9995;display:none;flex-direction:column;background:var(--surface);
+ border-left:1px solid var(--rule);box-shadow:-8px 0 30px -18px rgba(20,23,26,.4);
+ font-family:var(--gothic)}
+#hlmPanel.on{display:flex}
+#hlmPanel .hd{display:flex;align-items:center;justify-content:space-between;
+ padding:12px 14px;border-bottom:1px solid var(--rule2);font-size:14px}
+#hlmPanel .hd .x{border:0;background:transparent;cursor:pointer;
+ font-size:15px;color:var(--ink2);padding:2px 6px}
+#hlmPanel .tools{padding:10px 14px;border-bottom:1px solid var(--rule2);
+ display:flex;flex-direction:column;gap:8px}
+#hlmPanel .f{display:flex;gap:5px;flex-wrap:wrap}
+#hlmPanel .f button{padding:4px 9px;border:1px solid var(--rule);
+ border-radius:999px;background:var(--surface);cursor:pointer;font-size:12px;
+ color:var(--ink2);font-family:inherit;line-height:1.5}
+#hlmPanel .f button.on{background:var(--ink);color:var(--paper);
+ border-color:var(--ink)}
+#hlmPanel .mk{display:flex;align-items:center;gap:6px;font-size:12.5px;
+ color:var(--ink2);cursor:pointer}
+#hlmPanel .io{display:flex;gap:6px}
+#hlmPanel .io button{flex:1;padding:5px;border:1px solid var(--rule);
+ border-radius:6px;background:var(--surface);cursor:pointer;font-size:12px;
+ color:var(--ink2);font-family:inherit}
+#hlmPanel .io button:hover{background:var(--surface2)}
+#hlmPanel .list{flex:1;overflow:auto;padding:6px 0 20px}
+#hlmPanel .u{padding:9px 14px 4px;font-size:11.5px;color:var(--ink3);
+ font-weight:700;letter-spacing:.02em;position:sticky;top:0;
+ background:var(--surface)}
+#hlmPanel .it{display:flex;align-items:flex-start;gap:7px;padding:7px 14px;
+ cursor:pointer;font-size:12.5px;line-height:1.7;color:var(--ink)}
+#hlmPanel .it:hover{background:var(--surface2)}
+#hlmPanel .it .sw{flex:0 0 auto;margin-top:4px}
+#hlmPanel .it span{flex:1}
+#hlmPanel .it .d{border:0;background:transparent;cursor:pointer;
+ color:var(--ink3);font-size:12px;padding:0 2px;opacity:0}
+#hlmPanel .it:hover .d{opacity:1}
+#hlmPanel .empty{padding:20px 14px;font-size:12.5px;color:var(--ink3);
+ line-height:1.9}
+
+#hlmPanel .help{border-top:1px solid var(--rule2);font-size:12px;
+ color:var(--ink2);background:var(--surface2)}
+#hlmPanel .help summary{padding:10px 14px;cursor:pointer;font-size:12.5px;
+ color:var(--ink);list-style:none}
+#hlmPanel .help summary::-webkit-details-marker{display:none}
+#hlmPanel .help summary::before{content:"＋ ";color:var(--ink3)}
+#hlmPanel .help[open] summary::before{content:"− "}
+#hlmPanel .help dl{margin:0;padding:0 14px 14px}
+#hlmPanel .help dt{font-weight:700;color:var(--ink);margin-top:9px;
+ font-size:12px}
+#hlmPanel .help dd{margin:2px 0 0;line-height:1.85}
+
+@media print{
+ #hlmPop,#hlmFab,#hlmPanel{display:none!important}
+ .hlm{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ body.hlm-mask .hlm{color:inherit!important}
+}
+@media (max-width:680px){#hlmFab{opacity:.85;font-size:11px;padding:4px 9px}}
+
 </style></head>
 <body>
 <div class="wrap">
 <div class="hero"><div class="k">総合旅行業務取扱管理者試験 ／ <a href="./">教材一覧へ</a></div><h1>コード・アライアンス・シェンゲン 暗記</h1>
 <p>航空会社コードとアライアンス、都市・空港コード、シェンゲン協定の加盟状況と通貨を、一覧・ドリル・本試験の組合せの3つで覚える。所属と制度は2026年8月1日現在（教材「出入国法令・海外実務」P04・P05による）。</p></div>
-<div class="tabs" role="tablist"><button type="button" data-tab="list" class="on">一覧で覚える</button><button type="button" data-tab="drill">ドリル</button><button type="button" data-tab="exam">本試験の組合せ</button><span class="sp"></span><span class="pg" id="pgAll"></span></div>
+<div class="tabs" role="tablist"><button type="button" data-tab="list" class="on">一覧で覚える</button><button type="button" data-tab="drill">ドリル</button><button type="button" data-tab="exam">本試験の組合せ</button><span class="sp"></span><span class="mkt"><button type="button" class="btn" id="bMkSel">暗記済みを選ぶ</button><button type="button" class="btn" id="bMkHide">暗記済みを隠す</button><span class="pg" id="mkCnt"></span></span><span class="pg" id="pgAll"></span></div>
+<div class="mkbar" id="mkBar" hidden>暗記済みにする項目を押す（もう一度押すと外れる）。<button type="button" class="btn" id="bMkDone">選び終える</button><button type="button" class="btn" id="bMkClr">すべて外す</button></div>
 
 <!-- 一覧 -->
 <div class="pane" id="p-list">
+<p class="note" style="margin:8px 0 0">「暗記済みを選ぶ」を押してから項目（航空会社・都市・国）を押すと暗記済みの印が付き、「暗記済みを隠す」で一覧から隠れる。暗記済みの項目はドリルでも出題しない（ドリルの欄で変更できる）。文字を選ぶとマーカーを引ける。</p>
 <div class="sub"><a href="#s-mx">アライアンス早見表</a><a href="#s-al">航空会社コード一覧</a><a href="#s-cf">取り違えやすいコード</a><a href="#s-ci">都市・空港コード</a><a href="#s-sg">シェンゲン協定と通貨</a></div>
 
-<div class="card" id="s-mx"><h2>アライアンス早見表<span class="cn">地域ごとに、どのアライアンスに属するかを見る</span></h2>
+<div class="card page" id="s-mx"><h2>アライアンス早見表<span class="cn">地域ごとに、どのアライアンスに属するかを見る</span></h2>
 <div class="tools"><span class="lb">隠して確かめる：</span><button type="button" class="btn" data-hide="hc">コードを隠す</button><button type="button" class="btn" data-hide="hn">社名を隠す</button><span class="note">隠した項目は押すと表示される。</span></div>
 <div class="tw mxw"><table class="mx" id="mx"></table></div><div id="mxm"></div><p class="note">※は最近の加盟・移籍、又は脱退が報じられている社（一覧の補足を参照）。</p>
 <h3>覚え方（同じ国・同じグループで組にする）</h3>
@@ -135,17 +253,17 @@ body.he .exl li:not(.show) .v,body.he .exl li:not(.show) .w{visibility:hidden}
 <li><b>最近の移動</b>：VS ヴァージン アトランティック（2023年3月 SkyTeam 加盟）、SK（2024年9月 Star→SkyTeam）、AZ ITA（2026年4月1日 SkyTeam→Star）、HA ハワイアン（2026年4月 oneworld 加盟）</li>
 </ul></div>
 
-<div class="card" id="s-al"><h2>航空会社コード一覧<span class="cn" id="alCnt"></span></h2>
+<div class="card page" id="s-al"><h2>航空会社コード一覧<span class="cn" id="alCnt"></span></h2>
 <div class="tools"><span class="lb">並べ替え：</span><button type="button" class="btn on" data-sort="c">コード順</button><button type="button" class="btn" data-sort="rg">地域順</button><span class="lb">絞り込み：</span><button type="button" class="btn on" data-alf="">すべて</button><button type="button" class="btn" data-alf="S">Star</button><button type="button" class="btn" data-alf="T">SkyTeam</button><button type="button" class="btn" data-alf="O">oneworld</button><button type="button" class="btn" data-alf="N">非加盟</button></div>
-<div class="tw"><table id="alT"><thead><tr><th>コード</th><th>航空会社</th><th>英語名</th><th>国・地域</th><th>アライアンス</th><th>補足</th></tr></thead><tbody></tbody></table></div>
+<div class="tw" id="alW1"><table class="alt" id="alT1"><thead><tr><th>コード</th><th>航空会社</th><th>英語名</th><th>国・地域</th><th>アライアンス</th><th>補足</th></tr></thead><tbody></tbody></table></div><div class="tw" id="alW2" hidden><table class="alt" id="alT2"><thead><tr><th>コード</th><th>航空会社</th><th>英語名</th><th>国・地域</th><th>アライアンス</th><th>補足</th></tr></thead><tbody></tbody></table></div>
 <p class="note">コードを隠す・社名を隠すの切り替えはこの表にも効く。行を押すと隠した項目が表示される。</p></div>
 
-<div class="card" id="s-cf"><h2>取り違えやすいコード</h2>
+<div class="card page" id="s-cf"><h2>取り違えやすいコード</h2>
 <div class="tw"><table class="conf" id="cfT"><thead><tr><th>似たコード</th><th>航空会社とアライアンス</th></tr></thead><tbody></tbody></table></div>
 <h3>都市コード</h3>
 <div class="tw"><table class="conf" id="ccT"><thead><tr><th>コード</th><th>正しい都市</th><th>取り違えやすいもの</th></tr></thead><tbody></tbody></table></div></div>
 
-<div class="card" id="s-ci"><h2>都市・空港コード<span class="cn" id="ciCnt"></span></h2>
+<div class="card page" id="s-ci"><h2>都市・空港コード<span class="cn" id="ciCnt"></span></h2>
 <div class="tools"><span class="lb">隠して確かめる：</span><button type="button" class="btn" data-hide="hc">コードを隠す</button><button type="button" class="btn" data-hide="hn">都市名を隠す</button></div>
 <ul class="rules">
 <li>空港が複数ある都市は、都市コードと空港コードが別にある（TYO＝NRT・HND、LON＝LHR・LGW など）。本試験では「その都市の空港か」が問われ、別の都市の空港コードを組み合わせた選択肢が誤りになる（MIL−FCO、WAS−IAH、ROM−LIN）。</li>
@@ -155,13 +273,13 @@ body.he .exl li:not(.show) .v,body.he .exl li:not(.show) .w{visibility:hidden}
 </ul>
 <div id="ciL"></div></div>
 
-<div class="card" id="s-sg"><h2>シェンゲン協定と通貨<span class="cn">2026年8月1日現在</span></h2>
+<div class="card"><div class="page" id="s-sg"><h2>シェンゲン協定と通貨<span class="cn">2026年8月1日現在</span></h2>
 <div class="cnt3"><div>EU 加盟国 <b>27</b></div><div>シェンゲン協定加盟国 <b>29</b></div><div>ユーロ導入国 <b>21</b></div></div>
 <div class="tools"><span class="lb">隠して確かめる：</span><button type="button" class="btn" data-hide="hs">区分と通貨を隠す</button><span class="note">国の位置はおおよそ。押すと詳細が出る。</span></div>
 <div class="leg"><span><i style="background:var(--c1)"></i>シェンゲン加盟・ユーロ</span><span><i style="background:var(--c2)"></i>シェンゲン加盟・EU加盟・ユーロ以外</span><span><i style="background:var(--c3)"></i>シェンゲン加盟・EU非加盟</span><span><i style="background:var(--c4)"></i>EU加盟・シェンゲン非加盟（ユーロ）</span><span><i style="background:var(--c5)"></i>EU・シェンゲンとも非加盟</span><span><i style="border:2px dashed var(--c6)"></i>EU非加盟・ユーロ使用</span></div>
-<div class="sgw"><div class="sgrid" id="sgrid"></div></div>
+<div class="sgw"><div class="sgrid" id="sgrid"></div></div></div>
 <div class="fb" id="sgInfo" style="max-width:720px"></div>
-<h3>覚え方</h3>
+<div class="page" id="s-sg2"><h3>覚え方</h3>
 <ul class="rules">
 <li><b>EU 加盟なのにシェンゲン非加盟</b>＝アイルランド・キプロス（どちらも島国）。通貨はどちらもユーロ。</li>
 <li><b>EU 非加盟なのにシェンゲン加盟</b>＝アイスランド・ノルウェー・スイス・リヒテンシュタイン（EFTA の4か国）。通貨はクローナ・クローネ・フラン・フラン。</li>
@@ -172,21 +290,21 @@ body.he .exl li:not(.show) .v,body.he .exl li:not(.show) .w{visibility:hidden}
 <li><b>最近の加盟</b>：クロアチア（2023年1月1日 シェンゲン・ユーロ）、ブルガリア・ルーマニア（2025年1月1日 シェンゲン完全加盟）、ブルガリア（2026年1月1日 ユーロ）。キプロスはシェンゲン協定の適用に向けた手続中。</li>
 </ul>
 <div class="tw" style="margin-top:8px"><table id="sgT"><thead><tr><th>国</th><th>EU</th><th>シェンゲン協定</th><th>通貨</th><th>補足</th></tr></thead><tbody></tbody></table></div>
-</div>
+</div></div>
 </div>
 
 <!-- ドリル -->
 <div class="pane" id="p-drill" hidden>
 <div class="card"><h2>ドリル<span class="cn">1回20問。間違えた問題は数問後に再び出る。正答を重ねた問題ほど出にくくなる。</span></h2>
 <div id="deckw"><div class="decks" id="decks"></div></div><button type="button" class="btn" id="bDecks" hidden>ドリルを選び直す</button>
-<div class="tools" style="margin-top:8px"><button type="button" class="btn" id="bWeak">苦手だけ（誤答の多い順）</button><button type="button" class="btn" id="bReset">記録を消す</button><span class="note" id="dNote"></span></div>
+<div class="tools" style="margin-top:8px"><button type="button" class="btn" id="bWeak">苦手だけ（誤答の多い順）</button><button type="button" class="btn" id="bReset">記録を消す</button><label class="ckl"><input type="checkbox" id="cSkip"> 暗記済みの項目を出題しない</label><span class="note" id="dNote"></span></div>
 <div class="qbox" id="qbox"><div class="done"><div class="big">ドリルを選ぶ</div><p class="note">「おまかせ」は全種類から、未出題と苦手を優先して出す。本試験形式は「A−B−C」の組合せの正誤を判断する。</p></div></div>
 <div class="keys">キー操作：1〜4 で選択（正誤は 1＝正しい、2＝誤り）、Enter／スペースで次へ。</div>
 </div></div>
 
 <!-- 本試験 -->
 <div class="pane" id="p-exam" hidden>
-<div class="card"><h2>本試験の組合せ（令和3〜7年度）<span class="cn" id="exCnt"></span></h2>
+<div class="card page" id="s-ex"><h2>本試験の組合せ（令和3〜7年度）<span class="cn" id="exCnt"></span></h2>
 <div class="tools"><button type="button" class="btn" id="bHe">正誤を隠す</button><span class="note">正誤は2026年8月1日現在の規則による。行を押すと隠した正誤が表示される。</span></div>
 <div id="exL"></div></div></div>
 </div>
@@ -213,39 +331,54 @@ $$('.tabs button[data-tab]').forEach(function(b){b.onclick=function(){tab(b.data
 /* ---------- 隠す ---------- */
 function hideSet(c,on){document.body.classList.toggle(c,on);$$('[data-hide="'+c+'"]').forEach(function(b){b.classList.toggle('on',on)});S['h_'+c]=on;save();$$('.show').forEach(function(x){x.classList.remove('show')})}
 $$('[data-hide]').forEach(function(b){b.onclick=function(){hideSet(b.dataset.hide,!document.body.classList.contains(b.dataset.hide))}});
-document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('.chip,.cc,#alT tbody tr,.tile,.exl li');if(t)t.classList.toggle('show')});
+document.addEventListener('click',function(e){var sel=window.getSelection&&String(window.getSelection());if(sel&&sel.length>1)return;if(!e.target.closest||e.target.closest('a,button,input,label'))return;
+ if(document.body.classList.contains('mksel')){var m=e.target.closest('[data-mk]');if(m){e.preventDefault();e.stopPropagation();mkToggle(m.dataset.mk)}return}
+ if(e.target.closest('span.hlm'))return;
+ var t=e.target.closest&&e.target.closest('.chip,.cc,table.alt tbody tr,.tile,.exl li');if(t)t.classList.toggle('show')},true);
 
+/* ---------- 暗記済み ---------- */
+S.mk=S.mk||{};
+function mkApply(){$$('[data-mk]').forEach(function(el){el.classList.toggle('mk',!!S.mk[el.dataset.mk])});var n=Object.keys(S.mk).length;$('#mkCnt').textContent=n?'暗記済み '+n:''}
+function mkToggle(k){if(S.mk[k])delete S.mk[k];else S.mk[k]=1;save();mkApply();renderDecksSafe()}
+function mkSel(on){document.body.classList.toggle('mksel',on);$('#bMkSel').classList.toggle('on',on);$('#mkBar').hidden=!on}
+function mkHide(on){document.body.classList.toggle('mkh',on);$('#bMkHide').classList.toggle('on',on);$('#bMkHide').textContent=on?'暗記済みを表示':'暗記済みを隠す';S.mkh=on;save()}
+$('#bMkSel').onclick=function(){mkSel(!document.body.classList.contains('mksel'))};$('#bMkDone').onclick=function(){mkSel(false)};
+$('#bMkHide').onclick=function(){mkHide(!document.body.classList.contains('mkh'))};
+var clr=0;$('#bMkClr').onclick=function(){clr++;if(clr<2){$('#bMkClr').textContent='もう一度押すと全部外す';setTimeout(function(){clr=0;$('#bMkClr').textContent='すべて外す'},4000);return}clr=0;S.mk={};save();mkApply();$('#bMkClr').textContent='すべて外す';renderDecksSafe()};
+function renderDecksSafe(){if(typeof renderDecks==='function')try{renderDecks()}catch(e){}}
 /* ---------- 早見表 ---------- */
 var RG=['日本','韓国','中国','香港・台湾','東南アジア','南アジア','中東','アフリカ','ヨーロッパ','北米','中南米','オセアニア','東アジア（その他）'];
 var mx='<thead><tr><th>地域</th>'+['S','T','O','N'].map(function(k){return '<th class="'+k+'">'+ALN[k]+'</th>'}).join('')+'</tr></thead><tbody>';
-RG.forEach(function(r){var row=AL.filter(function(a){return a.rg===r});if(!row.length)return;mx+='<tr><td class="rg">'+E(r==='東アジア（その他）'?'モンゴル':r)+'</td>'+['S','T','O','N'].map(function(k){return '<td>'+row.filter(function(a){return a.al===k}).map(function(a){return '<span class="chip '+k+'" title="'+E(a.en)+'"><b>'+a.c+'</b><span class="jn">'+E(a.ja)+'</span>'+(a.n?'<span class="nt">※</span>':'')+'</span>'}).join('')+'</td>'}).join('')+'</tr>'});
+RG.forEach(function(r){var row=AL.filter(function(a){return a.rg===r});if(!row.length)return;mx+='<tr><td class="rg">'+E(r==='東アジア（その他）'?'モンゴル':r)+'</td>'+['S','T','O','N'].map(function(k){return '<td>'+row.filter(function(a){return a.al===k}).map(function(a){return '<span class="chip '+k+'" data-mk="al:'+a.c+'" title="'+E(a.en)+'"><b>'+a.c+'</b><span class="jn">'+E(a.ja)+'</span>'+(a.n?'<span class="nt">※</span>':'')+'</span>'}).join('')+'</td>'}).join('')+'</tr>'});
 $('#mx').innerHTML=mx+'</tbody>';
-var ml='';RG.forEach(function(r){var row=AL.filter(function(a){return a.rg===r});if(!row.length)return;ml+='<div class="mr"><div class="mrh">'+E(r==='東アジア（その他）'?'モンゴル':r)+'</div>'+['S','T','O','N'].map(function(k){var cs=row.filter(function(a){return a.al===k});return cs.length?'<div class="mrc">'+alb(k)+' '+cs.map(function(a){return '<span class="chip '+k+'"><b>'+a.c+'</b><span class="jn">'+E(a.ja)+'</span>'+(a.n?'<span class="nt">※</span>':'')+'</span>'}).join('')+'</div>':''}).join('')+'</div>'});
+var ml='';RG.forEach(function(r){var row=AL.filter(function(a){return a.rg===r});if(!row.length)return;ml+='<div class="mr"><div class="mrh">'+E(r==='東アジア（その他）'?'モンゴル':r)+'</div>'+['S','T','O','N'].map(function(k){var cs=row.filter(function(a){return a.al===k});return cs.length?'<div class="mrc">'+alb(k)+' '+cs.map(function(a){return '<span class="chip '+k+'" data-mk="al:'+a.c+'"><b>'+a.c+'</b><span class="jn">'+E(a.ja)+'</span>'+(a.n?'<span class="nt">※</span>':'')+'</span>'}).join('')+'</div>':''}).join('')+'</div>'});
 $('#mxm').innerHTML=ml;
 /* 航空会社一覧 */
 var alSort='c',alF='';
-function alTable(){var rows=ALL.slice().filter(function(a){return !alF||a.al===alF});rows.sort(function(a,b){return alSort==='c'?a.c.localeCompare(b.c):(RG.indexOf(a.rg)-RG.indexOf(b.rg))||a.c.localeCompare(b.c)});
-$('#alT tbody').innerHTML=rows.map(function(a){return '<tr'+(a.x?' class="x"':'')+'><td><span class="code hcd">'+a.c+'</span></td><td><span class="hnm">'+E(a.ja)+'</span></td><td>'+E(a.en)+'</td><td>'+E(a.ct)+'</td><td>'+(a.al?alb(a.al):'<span class="note">（取り違え例）</span>')+'</td><td class="note">'+E([a.o?'コードの由来：'+a.o:'',a.n||''].filter(Boolean).join(' '))+'</td></tr>'}).join('');
-$('#alCnt').textContent=AL.length+'社（2026年8月1日現在）'}
-$$('[data-sort]').forEach(function(b){b.onclick=function(){alSort=b.dataset.sort;$$('[data-sort]').forEach(function(x){x.classList.toggle('on',x===b)});alTable()}});
-$$('[data-alf]').forEach(function(b){b.onclick=function(){alF=b.dataset.alf;$$('[data-alf]').forEach(function(x){x.classList.toggle('on',x===b)});alTable()}});
-alTable();
+function alRows(sortKey){var rows=ALL.slice();rows.sort(function(a,b){return sortKey==='c'?a.c.localeCompare(b.c):(RG.indexOf(a.rg)-RG.indexOf(b.rg))||a.c.localeCompare(b.c)});
+ return rows.map(function(a){return '<tr data-mk="al:'+a.c+'" data-al="'+(a.al||'X')+'"'+(a.x?' class="x"':'')+'><td><span class="code hcd">'+a.c+'</span></td><td><span class="hnm">'+E(a.ja)+'</span></td><td>'+E(a.en)+'</td><td>'+E(a.ct)+'</td><td>'+(a.al?alb(a.al):'<span class="note">（取り違え例）</span>')+'</td><td class="note">'+E([a.o?'コードの由来：'+a.o:'',a.n||''].filter(Boolean).join(' '))+'</td></tr>'}).join('')}
+$('#alT1 tbody').innerHTML=alRows('c');$('#alT2 tbody').innerHTML=alRows('rg');
+$('#alCnt').textContent=AL.length+'社（2026年8月1日現在）';
+function alView(){$('#alW1').hidden=alSort!=='c';$('#alW2').hidden=alSort==='c';$$('.alt tbody tr').forEach(function(r){r.classList.toggle('fo',!!alF&&r.dataset.al!==alF)})}
+$$('[data-sort]').forEach(function(b){b.onclick=function(){alSort=b.dataset.sort;$$('[data-sort]').forEach(function(x){x.classList.toggle('on',x===b)});alView()}});
+$$('[data-alf]').forEach(function(b){b.onclick=function(){alF=b.dataset.alf;$$('[data-alf]').forEach(function(x){x.classList.toggle('on',x===b)});alView()}});
+alView();
 $('#cfT tbody').innerHTML=D.conf.map(function(g){return '<tr><td class="code">'+g.join(' ／ ')+'</td><td>'+g.map(function(c){var a=BYC[c];return a?'<span class="code">'+c+'</span> '+E(a.ja)+(a.al?' '+alb(a.al):'（'+E(a.ct)+'）'):c}).join('、')+'</td></tr>'}).join('');
 $('#ccT tbody').innerHTML=D.cconf.map(function(r){return '<tr><td class="code">'+E(r[0])+'</td><td>'+E(r[1])+'</td><td>'+E(r[2])+'</td></tr>'}).join('');
 /* 都市 */
 var crg=[];D.ci.forEach(function(c){if(crg.indexOf(c.rg)<0)crg.push(c.rg)});
-$('#ciL').innerHTML=crg.map(function(r){return '<h3>'+E(r)+'</h3><div class="cg">'+D.ci.filter(function(c){return c.rg===r}).map(function(c){var nt=c.nt&&c.nt!==c.ct?'（'+c.nt+'）':'';return '<div class="cc"><div class="t"><b>'+c.c+'</b><span class="nm2">'+E(c.nm)+E(nt)+'</span></div><div class="ct">'+E(c.ct)+'</div>'+(c.ap.length?'<div class="ap">'+c.ap.map(function(a){return '<span><span class="code">'+a[0]+'</span> <span class="an">'+E(a[1]||'')+'</span></span>'}).join('')+'</div>':'')+'</div>'}).join('')+'</div>'}).join('');
+$('#ciL').innerHTML=crg.map(function(r){return '<h3>'+E(r)+'</h3><div class="cg">'+D.ci.filter(function(c){return c.rg===r}).map(function(c){var nt=c.nt&&c.nt!==c.ct?'（'+c.nt+'）':'';return '<div class="cc" data-mk="ci:'+c.c+'"><div class="t"><b>'+c.c+'</b><span class="nm2">'+E(c.nm)+E(nt)+'</span></div><div class="ct">'+E(c.ct)+'</div>'+(c.ap.length?'<div class="ap">'+c.ap.map(function(a){return '<span><span class="code">'+a[0]+'</span> <span class="an">'+E(a[1]||'')+'</span></span>'}).join('')+'</div>':'')+'</div>'}).join('')+'</div>'}).join('');
 $('#ciCnt').textContent=D.ci.length+'都市';
 /* シェンゲン */
 function kind(c){if(c.sc&&c.cs==='ユーロ')return 1;if(c.sc&&c.eu)return 2;if(c.sc)return 3;if(c.eu)return 4;if(c.cs==='ユーロ')return 6;return 5}
 var KN={1:'シェンゲン加盟・ユーロ',2:'シェンゲン加盟・EU加盟・ユーロ未導入',3:'シェンゲン加盟・EU非加盟',4:'EU加盟・シェンゲン非加盟',5:'EU・シェンゲンとも非加盟',6:'EU非加盟・ユーロ使用'};
-var g='';D.sc.forEach(function(c,i){if(!c.g)return;var k=kind(c);g+='<div class="tile k'+k+(k===6?' sm':'')+'" data-i="'+i+'" style="grid-column:'+(c.g[0]+1)+';grid-row:'+(c.g[1]+1)+'"><span class="n">'+E(c.nm)+'</span><span class="c">'+E(c.cs)+'</span></div>'});
+var g='';D.sc.forEach(function(c,i){if(!c.g)return;var k=kind(c);g+='<div class="tile k'+k+(k===6?' sm':'')+'" data-mk="sc:'+c.nm+'" data-i="'+i+'" style="grid-column:'+(c.g[0]+1)+';grid-row:'+(c.g[1]+1)+'"><span class="n">'+E(c.nm)+'</span><span class="c">'+E(c.cs)+'</span></div>'});
 $('#sgrid').innerHTML=g;
 $('#sgrid').addEventListener('click',function(e){var t=e.target.closest('.tile');if(!t)return;var c=D.sc[+t.dataset.i],b=$('#sgInfo');b.className='fb ok';b.innerHTML='<div class="h">'+E(c.nm)+'</div>EU：'+(c.eu?'加盟':'非加盟')+'　シェンゲン協定：'+(c.sc?'加盟':'非加盟')+'　通貨：'+E(c.cur)+(c.old?'<br>旧通貨：'+E(c.old):'')+(c.nt?'<br>'+E(c.nt):'')});
-$('#sgT tbody').innerHTML=D.sc.slice().sort(function(a,b){return kind(a)-kind(b)}).map(function(c){return '<tr><td>'+E(c.nm)+'</td><td>'+(c.eu?'加盟':'非加盟')+'</td><td>'+(c.sc?'加盟':'<b>非加盟</b>')+'</td><td>'+E(c.cur)+'</td><td class="note">'+E([c.old?'旧通貨 '+c.old:'',c.nt].filter(Boolean).join(' '))+'</td></tr>'}).join('');
+$('#sgT tbody').innerHTML=D.sc.slice().sort(function(a,b){return kind(a)-kind(b)}).map(function(c){return '<tr data-mk="sc:'+c.nm+'"><td>'+E(c.nm)+'</td><td>'+(c.eu?'加盟':'非加盟')+'</td><td>'+(c.sc?'加盟':'<b>非加盟</b>')+'</td><td>'+E(c.cur)+'</td><td class="note">'+E([c.old?'旧通貨 '+c.old:'',c.nt].filter(Boolean).join(' '))+'</td></tr>'}).join('');
 
 /* ---------- 本試験 ---------- */
-$('#exL').innerHTML=D.ex.map(function(q){return '<div class="exq"><div class="h">'+E(q.tag)+'</div><div class="s">'+E(q.stem)+'</div><ul class="exl">'+q.it.map(function(it){return '<li><span class="t">'+E(it.t)+'</span><span><span class="v '+(it.ok?'o':'x')+'">'+(it.ok?'正しい':'誤り')+'</span></span><span class="w">'+E(it.why)+'</span></li>'}).join('')+'</ul></div>'}).join('');
+$('#exL').innerHTML=D.ex.map(function(q){return '<div class="exq"><div class="h">'+E(q.tag)+'</div><div class="s">'+E(q.stem)+'</div><ul class="exl">'+q.it.map(function(it){return '<li data-mk="ex:'+q.id+':'+it.k+'"><span class="t">'+E(it.t)+'</span><span><span class="v '+(it.ok?'o':'x')+'">'+(it.ok?'正しい':'誤り')+'</span></span><span class="w">'+E(it.why)+'</span></li>'}).join('')+'</ul></div>'}).join('');
 $('#exCnt').textContent=D.ex.length+'問・'+D.ex.reduce(function(s,q){return s+q.it.length},0)+'の組合せ';
 function heSet(on){document.body.classList.toggle('he',on);$('#bHe').classList.toggle('on',on);$('#bHe').textContent=on?'正誤を表示':'正誤を隠す';S.he=on;save()}
 $('#bHe').onclick=function(){heSet(!document.body.classList.contains('he'))};
@@ -319,7 +452,10 @@ function renderDecks(){$('#decks').innerHTML=GROUPS.map(function(g){var ms=maste
  $$('#decks .deck').forEach(function(b){b.onclick=function(){start(b.dataset.g,false)}})}
 var cur=null;
 function weight(t,i){var r=rec(t,i);if(!r)return 6;return Math.max(.4,(5-r.l)*1.3+r.w*.8)}
-function start(gid,weak){var g=GROUPS.filter(function(x){return x[0]===gid})[0]||GROUPS[0];var pool=[];g[3].forEach(function(t){TYPES[t].items().forEach(function(i){pool.push([t,i])})});
+var MKP={al1:'al',al2:'al',al3:'al',al4:'al',ci1:'ci',ci2:'ci',ci3:'ci',sc1:'sc',sc2:'sc',sc3:'sc'};
+function memo(t,i){return !!S.mk[MKP[t]+':'+i]}
+function start(gid,weak){var g=GROUPS.filter(function(x){return x[0]===gid})[0]||GROUPS[0];var pool=[];g[3].forEach(function(t){TYPES[t].items().forEach(function(i){if(S.skip!==false&&memo(t,i))return;pool.push([t,i])})});
+ if(!pool.length){$('#dNote').textContent='出題できる項目がない（すべて暗記済み）。';return}
  if(weak){pool=pool.filter(function(p){var r=rec(p[0],p[1]);return r&&r.w>0&&r.l<3});pool.sort(function(a,b){return rec(b[0],b[1]).w-rec(a[0],a[1]).w});if(!pool.length){$('#dNote').textContent='誤答の記録がない。';return}}
  var q=[],used={};
  if(weak)q=pool.slice(0,20);else{for(var n=0;n<20&&n<pool.length;n++){var tot=0,ws=pool.map(function(p){var w=used[p[0]+':'+p[1]]?0:weight(p[0],p[1]);tot+=w;return w});var r=Math.random()*tot,j=0;while(j<ws.length-1&&r>ws[j]){r-=ws[j];j++}used[pool[j][0]+':'+pool[j][1]]=1;q.push(pool[j])}}
@@ -347,8 +483,564 @@ var rs=0;function confirmReset(){rs++;if(rs<2){$('#dNote').textContent='もう�
 document.addEventListener('keydown',function(e){if($('#p-drill').hidden||!curQ||e.target.closest('input,textarea'))return;var k=e.key;
  if(/^[1-4]$/.test(k)){var b=$$('#qbox .ch button')[+k-1];if(b&&!lock){e.preventDefault();b.click()}}
  else if((k==='Enter'||k===' ')&&lock){e.preventDefault();next()}});
-window.__CD={T:TYPES,D:D};renderDecks();
+window.__CD={T:TYPES,D:D};$('#cSkip').checked=S.skip!==false;$('#cSkip').onchange=function(){S.skip=this.checked;save()};mkApply();mkHide(!!S.mkh);renderDecks();
 ['hc','hn','hs'].forEach(function(c){if(S['h_'+c])hideSet(c,true)});heSet(!!S.he);tab(S.tab||'list');
 })();
+</script>
+<script>
+/* ============================================================
+   マーカー・下線機能（本文の HTML は書き換えない）
+
+   記録方式：
+     ルート要素（.page など）ごとに、その要素の全テキストを
+     連結した文字列上の開始・終了位置で範囲を持つ。
+     読み込み時にテキストノードを走査して span で包む。
+     span を入れてもテキスト内容は変わらないため、
+     付け外しを繰り返しても位置がずれない。
+
+   保存先：localStorage（ファイル名ごと）
+   ============================================================ */
+(function () {
+  'use strict';
+
+  var KEY = 'hlmark:' + (location.pathname.split('/').pop() || 'index');
+  var COLORS = [
+    { k: 'y', name: '黄' },
+    { k: 'g', name: '緑' },
+    { k: 'b', name: '青' },
+    { k: 'p', name: '桃' }
+  ];
+  var UNDER = { k: 'u', name: '下線' };
+
+  var store = load();          // [{r:ルートID, s:開始, e:終了, c:色}]
+  var pop = null;              // 操作ボタン
+  var panel = null;            // 一覧
+  var maskOn = false;          // 文字を隠す
+  var lastSel = null;          // 直近の選択範囲
+  var lastHid = null;          // 押したマーカーの ID
+
+  /* ---------- 保存 ---------- */
+  function load() {
+    try {
+      var v = localStorage.getItem(KEY);
+      return v ? JSON.parse(v) : [];
+    } catch (e) { return []; }
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {}
+  }
+
+  /* ---------- ルート要素の登録 ---------- */
+  function roots() {
+    return document.querySelectorAll('[data-hlr]');
+  }
+  function setupRoots() {
+    var n = 0;
+    var sel = ['.page', 'main .page', '[id^="view"] > .page'];
+    var seen = [];
+    sel.forEach(function (s) {
+      document.querySelectorAll(s).forEach(function (el) {
+        if (seen.indexOf(el) >= 0) return;
+        seen.push(el);
+      });
+    });
+    if (!seen.length) {
+      // .page が無いページは各ビュー、それも無ければ主要ブロック
+      document.querySelectorAll('[id^="view"], main, article, section').forEach(function (el) {
+        if (el.querySelector('[id^="view"], main, article')) return;
+        if (!el.textContent.trim()) return;
+        seen.push(el);
+      });
+    }
+    seen.forEach(function (el) {
+      if (el.hasAttribute('data-hlr')) return;
+      el.setAttribute('data-hlr', el.id || ('r' + (++n)));
+    });
+  }
+
+  /* ---------- テキストノードの走査 ---------- */
+  function walk(root) {
+    var out = [], w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (t) {
+        if (!t.nodeValue.length) return NodeFilter.FILTER_REJECT;
+        var p = t.parentNode;
+        while (p && p !== root) {
+          var tag = p.nodeName;
+          if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'SVG' || tag === 'svg')
+            return NodeFilter.FILTER_REJECT;
+          p = p.parentNode;
+        }
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var t;
+    while ((t = w.nextNode())) out.push(t);
+    return out;
+  }
+  function offsetOf(root, node, off) {
+    var ns = walk(root), pos = 0;
+    for (var i = 0; i < ns.length; i++) {
+      if (ns[i] === node) return pos + off;
+      pos += ns[i].nodeValue.length;
+    }
+    return -1;
+  }
+  function textOf(root) {
+    return walk(root).map(function (t) { return t.nodeValue; }).join('');
+  }
+
+  /* ---------- 適用 ---------- */
+  function applyOne(root, rec) {
+    var ns = walk(root), pos = 0, made = [];
+    for (var i = 0; i < ns.length; i++) {
+      var t = ns[i], len = t.nodeValue.length;
+      var a = Math.max(rec.s, pos), b = Math.min(rec.e, pos + len);
+      if (a < b) {
+        var node = t;
+        if (a - pos > 0) node = node.splitText(a - pos);
+        if (b - a < node.nodeValue.length) node.splitText(b - a);
+        var sp = document.createElement('span');
+        sp.className = 'hlm hlm-' + rec.c;
+        sp.setAttribute('data-hid', rec.id);
+        node.parentNode.insertBefore(sp, node);
+        sp.appendChild(node);
+        made.push(sp);
+        // splitText で配列がずれるため作り直す
+        ns = walk(root); pos = 0; i = -1;
+        // すでに包んだ範囲は再処理しない
+        var done = 0;
+        for (var j = 0; j < ns.length; j++) {
+          if (ns[j].parentNode === sp) { done = 1; }
+        }
+        // 位置を進めて続行
+        var np = 0, k = 0;
+        for (k = 0; k < ns.length; k++) {
+          if (np + ns[k].nodeValue.length > b) break;
+          np += ns[k].nodeValue.length;
+        }
+        i = k - 1; pos = np;
+        if (b >= rec.e) break;
+        continue;
+      }
+      pos += len;
+      if (pos >= rec.e) break;
+    }
+    return made;
+  }
+  function renderAll() {
+    // いったん全部外す
+    document.querySelectorAll('span.hlm').forEach(function (sp) {
+      var p = sp.parentNode;
+      while (sp.firstChild) p.insertBefore(sp.firstChild, sp);
+      p.removeChild(sp);
+    });
+    roots().forEach(function (r) { r.normalize(); });
+    // 付け直す（後ろから当てると位置がずれない）
+    var byRoot = {};
+    store.forEach(function (rec) {
+      (byRoot[rec.r] = byRoot[rec.r] || []).push(rec);
+    });
+    Object.keys(byRoot).forEach(function (rid) {
+      var root = document.querySelector('[data-hlr="' + cssEsc(rid) + '"]');
+      if (!root) return;
+      byRoot[rid].slice().sort(function (a, b) { return b.s - a.s; })
+        .forEach(function (rec) { applyOne(root, rec); });
+    });
+    document.body.classList.toggle('hlm-mask', maskOn);
+  }
+  function cssEsc(s) { return String(s).replace(/["\\]/g, '\\$&'); }
+
+  /* ---------- 追加・削除 ---------- */
+  function addMark(c) {
+    var sel = window.getSelection();
+    var rg = lastSel || (sel && sel.rangeCount ? sel.getRangeAt(0) : null);
+    if (!rg || rg.collapsed) return;
+    var root = rootOf(rg.commonAncestorContainer);
+    if (!root) return;
+    var s = offsetOf(root, rg.startContainer, rg.startOffset);
+    var e = offsetOf(root, rg.endContainer, rg.endOffset);
+    if (s < 0 || e < 0 || s >= e) return;
+    var rid = root.getAttribute('data-hlr');
+    var isU = (c === 'u');
+    // 同種（マーカー同士／下線同士）が重なる分は置き換える
+    store = store.filter(function (x) {
+      if (x.r !== rid) return true;
+      var same = (x.c === 'u') === isU;
+      if (!same) return true;
+      return !(x.s < e && s < x.e);
+    });
+    store.push({ id: 'h' + Date.now() + Math.random().toString(36).slice(2, 6),
+                 r: rid, s: s, e: e, c: c });
+    save(); renderAll(); hidePop();
+    if (sel) sel.removeAllRanges();
+    lastSel = null;
+  }
+  function delRange() {
+    var sel = window.getSelection();
+    // 付けたマーカーを押して出したボタンなら、そのマーカーだけを消す
+    if (lastHid) {
+      var hid = lastHid; lastHid = null; lastSel = null;
+      if (sel) sel.removeAllRanges();
+      delById(hid);
+      return;
+    }
+    var rg = lastSel || (sel && sel.rangeCount ? sel.getRangeAt(0) : null);
+    if (!rg) return;
+    var root = rootOf(rg.commonAncestorContainer);
+    if (!root) return;
+    var rid = root.getAttribute('data-hlr');
+    if (rg.collapsed) {
+      var sp = upto(rg.startContainer, 'hlm');
+      if (sp) { delById(sp.getAttribute('data-hid')); }
+      return;
+    }
+    var s = offsetOf(root, rg.startContainer, rg.startOffset);
+    var e = offsetOf(root, rg.endContainer, rg.endOffset);
+    store = store.filter(function (x) {
+      return !(x.r === rid && x.s < e && s < x.e);
+    });
+    save(); renderAll(); hidePop();
+    if (sel) sel.removeAllRanges();
+    lastSel = null;
+  }
+  function delById(id) {
+    store = store.filter(function (x) { return x.id !== id; });
+    save(); renderAll(); hidePop();
+  }
+  function rootOf(node) {
+    var el = node.nodeType === 1 ? node : node.parentNode;
+    while (el && el !== document.body) {
+      if (el.hasAttribute && el.hasAttribute('data-hlr')) return el;
+      el = el.parentNode;
+    }
+    return null;
+  }
+  function upto(node, cls) {
+    var el = node.nodeType === 1 ? node : node.parentNode;
+    while (el && el !== document.body) {
+      if (el.classList && el.classList.contains(cls)) return el;
+      el = el.parentNode;
+    }
+    return null;
+  }
+
+  /* ---------- 操作ボタン ---------- */
+  function buildPop() {
+    pop = document.createElement('div');
+    pop.id = 'hlmPop';
+    var html = '';
+    COLORS.forEach(function (c, i) {
+      html += '<button data-c="' + c.k + '" title="' + c.name + '（' + (i + 1) + '）">' +
+              '<i class="sw sw-' + c.k + '"></i>' + c.name + '</button>';
+    });
+    html += '<button data-c="u" title="下線（5）"><i class="sw sw-u"></i>下線</button>';
+    html += '<span class="sep"></span>';
+    html += '<button data-c="del" title="消す（Delete）">消す</button>';
+    pop.innerHTML = html;
+    document.body.appendChild(pop);
+    pop.addEventListener('mousedown', function (e) { e.preventDefault(); });
+    pop.addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      var c = b.getAttribute('data-c');
+      if (c === 'del') delRange(); else addMark(c);
+    });
+  }
+  function showPop(rect) {
+    if (!pop) buildPop();
+    pop.classList.add('on');
+    var mob = false;
+    try { mob = window.matchMedia && window.matchMedia('(max-width:760px)').matches; }
+    catch (e) { mob = (window.innerWidth || 1200) <= 760; }
+    if (mob) { pop.classList.add('bottom'); pop.style.left = ''; pop.style.top = ''; return; }
+    pop.classList.remove('bottom');
+    var pw = pop.offsetWidth || 320, ph = pop.offsetHeight || 40;
+    var x = rect.left + rect.width / 2 - pw / 2 + window.scrollX;
+    var y = rect.top - ph - 8 + window.scrollY;
+    if (y < window.scrollY + 4) y = rect.bottom + 8 + window.scrollY;
+    x = Math.max(8, Math.min(x, window.innerWidth - pw - 8));
+    pop.style.left = x + 'px'; pop.style.top = y + 'px';
+  }
+  function hidePop() { if (pop) pop.classList.remove('on'); }
+  function rectOf(rg) {
+    var r = null;
+    try { r = rg.getBoundingClientRect && rg.getBoundingClientRect(); } catch (e) {}
+    if (r && (r.width || r.height || r.top)) return r;
+    var el = rg.commonAncestorContainer;
+    if (el && el.nodeType !== 1) el = el.parentNode;
+    try { r = el && el.getBoundingClientRect(); } catch (e) {}
+    return r || { left: 0, top: 0, width: 0, height: 0, bottom: 0 };
+  }
+
+  /* ---------- 一覧 ---------- */
+  function unitOf(el) {
+    var p = el;
+    while (p && p !== document.body) {
+      if (p.classList && p.classList.contains('page')) {
+        var h = p.querySelector('h2.sec, h2, h3');
+        if (h) return h.textContent.replace(/\s+/g, ' ').trim();
+      }
+      p = p.parentNode;
+    }
+    return '';
+  }
+  function buildPanel() {
+    panel = document.createElement('div');
+    panel.id = 'hlmPanel';
+    panel.innerHTML =
+      '<div class="hd"><b>マーカー一覧</b>' +
+      '<button class="x" title="閉じる">✕</button></div>' +
+      '<div class="tools">' +
+      '<div class="f"><button data-f="all" class="on">すべて</button>' +
+      COLORS.map(function (c) {
+        return '<button data-f="' + c.k + '"><i class="sw sw-' + c.k + '"></i></button>';
+      }).join('') +
+      '<button data-f="u"><i class="sw sw-u"></i></button></div>' +
+      '<label class="mk"><input type="checkbox" id="hlmMask">マーカー部分の文字を隠す</label>' +
+      '<div class="io"><button id="hlmExp">書き出す</button>' +
+      '<button id="hlmImp">読み込む</button>' +
+      '<button id="hlmClr">全部消す</button></div></div>' +
+      '<div class="list"></div>' +
+      '<details class="help"><summary>使い方</summary>' +
+      '<dl>' +
+      '<dt>付ける</dt><dd>本文を選ぶと、選んだ箇所の上にボタンが出ます。' +
+      'スマートフォンでは画面の下に出ます。</dd>' +
+      '<dt>変える・消す</dt><dd>付けた箇所を押すと同じボタンが出ます。' +
+      '範囲を選んで「消す」を押すと、その範囲の分をまとめて消せます。</dd>' +
+      '<dt>キーボード</dt><dd>選んだあと <b>1〜4</b> で色、<b>5</b> で下線、' +
+      '<b>Delete</b> で削除、<b>Esc</b> で閉じます。</dd>' +
+      '<dt>重ね方</dt><dd>マーカーと下線は重ねられます。' +
+      'マーカー同士・下線同士を同じ範囲に付けると、前のものが置き換わります。</dd>' +
+      '<dt>文字を隠す</dt><dd>上の切り替えを入れると、マーカー部分が色の帯になります。' +
+      '帯を押すとその箇所だけ文字が出ます。下線は隠しません。</dd>' +
+      '<dt>印刷</dt><dd>マーカーと下線はそのまま印刷されます。</dd>' +
+      '<dt>保存</dt><dd>付けた箇所は、見ているブラウザにファイル名ごとに保存されます。' +
+      '同じブラウザで開き直せば元に戻ります。別の端末やブラウザには引き継がれず、' +
+      'ファイル名を変えた場合も同じです。そのときは「書き出す」で保存ファイルを作り、' +
+      '移した先で「読み込む」を使ってください。' +
+      'ブラウザの閲覧データを消すと、記録も消えます。</dd>' +
+      '</dl></details>';
+    document.body.appendChild(panel);
+    panel.querySelector('.x').onclick = function () { panel.classList.remove('on'); };
+    panel.querySelectorAll('.f button').forEach(function (b) {
+      b.onclick = function () {
+        panel.querySelectorAll('.f button').forEach(function (x) { x.classList.remove('on'); });
+        b.classList.add('on'); fillList(b.getAttribute('data-f'));
+      };
+    });
+    panel.querySelector('#hlmMask').onchange = function () {
+      maskOn = this.checked; document.body.classList.toggle('hlm-mask', maskOn);
+    };
+    panel.querySelector('#hlmExp').onclick = expJson;
+    panel.querySelector('#hlmImp').onclick = impJson;
+    panel.querySelector('#hlmClr').onclick = function () {
+      if (!confirm('この教材のマーカーと下線をすべて消します。よろしいですか。')) return;
+      store = []; save(); renderAll(); fillList('all');
+    };
+  }
+  function fillList(f) {
+    var box = panel.querySelector('.list');
+    var items = [];
+    roots().forEach(function (root) {
+      var rid = root.getAttribute('data-hlr');
+      store.filter(function (x) { return x.r === rid; })
+        .sort(function (a, b) { return a.s - b.s; })
+        .forEach(function (rec) {
+          if (f && f !== 'all' && rec.c !== f) return;
+          var sp = document.querySelector('span.hlm[data-hid="' + rec.id + '"]');
+          var txt = '';
+          document.querySelectorAll('span.hlm[data-hid="' + rec.id + '"]')
+            .forEach(function (s) { txt += s.textContent; });
+          items.push({ rec: rec, el: sp, unit: unitOf(root), txt: txt });
+        });
+    });
+    if (!items.length) {
+      box.innerHTML = '<p class="empty">まだマーカーはありません。本文を選ぶとボタンが出ます。</p>';
+      return;
+    }
+    var html = '', cur = '';
+    items.forEach(function (it) {
+      if (it.unit !== cur) { cur = it.unit; html += '<div class="u">' + esc(cur) + '</div>'; }
+      html += '<div class="it" data-id="' + it.rec.id + '">' +
+              '<i class="sw sw-' + it.rec.c + '"></i>' +
+              '<span>' + esc(it.txt.slice(0, 90)) + (it.txt.length > 90 ? '…' : '') + '</span>' +
+              '<button class="d" title="削除">✕</button></div>';
+    });
+    box.innerHTML = html;
+    box.querySelectorAll('.it').forEach(function (el) {
+      el.onclick = function (e) {
+        var id = el.getAttribute('data-id');
+        if (e.target.classList.contains('d')) {
+          delById(id); fillList(f); return;
+        }
+        jump(id);
+      };
+    });
+  }
+  function jump(id) {
+    var sp = document.querySelector('span.hlm[data-hid="' + id + '"]');
+    if (!sp) return;
+    // 閉じている解説・詳細を開く
+    var p = sp;
+    while (p && p !== document.body) {
+      if (p.nodeName === 'DETAILS') p.open = true;
+      if (p.classList && p.classList.contains('q')) p.classList.add('done');
+      p = p.parentNode;
+    }
+    // 非表示のビューなら知識タブに戻す
+    var view = sp.closest('[id^="view"]');
+    if (view && view.classList.contains('hidden') && typeof window.showView === 'function') {
+      window.showView(view.id.replace('view', '').toLowerCase());
+    }
+    sp.scrollIntoView({ behavior: 'auto', block: 'center' });
+    sp.classList.add('flash');
+    setTimeout(function () { sp.classList.remove('flash'); }, 1400);
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+
+  /* ---------- 書き出し・読み込み ---------- */
+  function expJson() {
+    var b = new Blob([JSON.stringify({ file: KEY, data: store }, null, 1)],
+                     { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(b);
+    a.download = KEY.replace(/[^\w.-]/g, '_') + '.json';
+    a.click();
+  }
+  function impJson() {
+    var i = document.createElement('input');
+    i.type = 'file'; i.accept = '.json,application/json';
+    i.onchange = function () {
+      var f = i.files[0]; if (!f) return;
+      var r = new FileReader();
+      r.onload = function () {
+        try {
+          var o = JSON.parse(r.result);
+          var d = Array.isArray(o) ? o : o.data;
+          if (!Array.isArray(d)) throw 0;
+          store = d; save(); renderAll(); fillList('all');
+          alert(d.length + '件を読み込みました。');
+        } catch (e) { alert('読み込めませんでした。'); }
+      };
+      r.readAsText(f);
+    };
+    i.click();
+  }
+
+  /* ---------- 起動 ---------- */
+  function boot() {
+    setupRoots();
+    renderAll();
+
+    var fab = document.createElement('button');
+    fab.id = 'hlmFab'; fab.textContent = 'マーカー一覧';
+    fab.onclick = function () {
+      if (!panel) buildPanel();
+      panel.classList.toggle('on');
+      if (panel.classList.contains('on')) {
+        panel.querySelector('#hlmMask').checked = maskOn;
+        fillList('all');
+      }
+    };
+    document.body.appendChild(fab);
+
+    document.addEventListener('mouseup', onSel);
+    document.addEventListener('touchend', function (ev) { setTimeout(function () { onSel(ev); }, 10); });
+
+    function onSel(e) {
+      if (pop && pop.contains(e && e.target)) return;
+      if (panel && panel.contains(e && e.target)) return;
+      var sel = window.getSelection();
+      var rg = sel && sel.rangeCount ? sel.getRangeAt(0) : null;
+      if (!rg || rg.collapsed) {
+        // マーカーを押したときは操作ボタンを出す（選択範囲が無い場合も）
+        var tg = e && e.target ? e.target : null;
+        var sp = tg && tg.nodeType ? upto(tg, 'hlm') : null;
+        if (sp && sp.getAttribute('data-hid')) {
+          lastHid = sp.getAttribute('data-hid');
+          lastSel = document.createRange();
+          lastSel.selectNodeContents(sp);
+          showPop(rectOf(lastSel));
+          return;
+        }
+        hidePop(); lastSel = null; lastHid = null; return;
+      }
+      lastHid = null;
+      if (!rootOf(rg.commonAncestorContainer)) { hidePop(); return; }
+      lastSel = rg.cloneRange();
+      showPop(rectOf(rg));
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (!pop || !pop.classList.contains('on')) return;
+      var t = e.target.nodeName;
+      if (t === 'INPUT' || t === 'TEXTAREA' || e.target.isContentEditable) return;
+      if (e.key === 'Escape') { hidePop(); return; }
+      if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); delRange(); return; }
+      var i = ['1', '2', '3', '4'].indexOf(e.key);
+      if (i >= 0) { e.preventDefault(); addMark(COLORS[i].k); return; }
+      if (e.key === '5') { e.preventDefault(); addMark('u'); }
+    });
+
+    // 隠した文字は押すと出す
+    document.addEventListener('click', function (e) {
+      if (!maskOn) return;
+      var sp = upto(e.target, 'hlm');
+      if (sp && sp.getAttribute('data-hid')) {
+        document.querySelectorAll('span.hlm[data-hid="' + sp.getAttribute('data-hid') + '"]')
+          .forEach(function (x) { x.classList.toggle('peek'); });
+      }
+    });
+
+    // タブ切替や再描画で DOM が変わったら付け直す
+    var tm = null, busy = false;
+    function refresh() {
+      if (busy) return;
+      clearTimeout(tm);
+      tm = setTimeout(function () {
+        busy = true;
+        try { setupRoots(); renderAll(); } catch (e) {}
+        setTimeout(function () { busy = false; }, 60);
+      }, 140);
+    }
+    document.querySelectorAll('.navtabs button').forEach(function (b) {
+      b.addEventListener('click', refresh);
+    });
+    if (window.MutationObserver) {
+      var mo = new MutationObserver(function (list) {
+        if (busy) return;
+        for (var i = 0; i < list.length; i++) {
+          var m = list[i];
+          // マーカー自身の出し入れは無視する
+          var own = false;
+          [].forEach.call(m.addedNodes, function (n) {
+            if (n.nodeType === 1 && n.classList && n.classList.contains('hlm')) own = true;
+          });
+          [].forEach.call(m.removedNodes, function (n) {
+            if (n.nodeType === 1 && n.classList && n.classList.contains('hlm')) own = true;
+          });
+          if (own) continue;
+          if (m.target && m.target.closest &&
+              (m.target.closest('#hlmPanel') || m.target.closest('#hlmPop'))) continue;
+          // 中身が差し替わった場合だけ拾う
+          if (m.addedNodes.length &&
+              [].some.call(m.addedNodes, function (n) {
+                return n.nodeType === 1 && (n.classList.contains('page') ||
+                       n.querySelector && n.querySelector('.page'));
+              })) { refresh(); return; }
+        }
+      });
+      mo.observe(document.body, { childList: true, subtree: true });
+    }
+  }
+
+  if (document.readyState === 'loading')
+    document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+
 </script>
 </body></html>
